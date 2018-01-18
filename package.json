@@ -1,0 +1,12 @@
+{
+    "name": "dareto",
+    "version": "0.1.0",
+    "description": "Interactive 3D design tool for the Dare To system",
+    "scripts": {
+        "start": "npm run webpack",
+        "webpack": "webpack -d --watch"
+    },
+    "dependencies": {
+        "webpack": "^3.0.0"
+    }
+}
