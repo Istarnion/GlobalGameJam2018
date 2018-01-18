@@ -1,12 +1,20 @@
 {
-    "name": "dareto",
+    "name": "ggj",
     "version": "0.1.0",
-    "description": "Interactive 3D design tool for the Dare To system",
+    "description": "An entry for the 2018 Global Game Jam",
+    "main": "webpack.config.js",
     "scripts": {
-        "start": "npm run webpack",
-        "webpack": "webpack -d --watch"
+        "watch": "webpack --watch",
+        "start": "webpack-dev-server --open",
+        "build": "webpack"
     },
     "dependencies": {
         "webpack": "^3.0.0"
+    },
+    "devDependencies": {
+        "babel-core": "^6.26.0",
+        "babel-loader": "^7.1.2",
+        "babel-preset-es2015": "^6.24.1",
+        "webpack-dev-server": "^2.11.0"
     }
 }
