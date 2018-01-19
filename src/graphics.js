@@ -38,6 +38,14 @@ const onResize = () => {
 
 window.addEventListener("resize", onResize);
 
+gfx.drawLine = (x_from, y_from, x_to, y_to) => {
+    this.gfx.beginPath();
+    this.gfx.moveTo(x_from, y_from);
+    this.gfx.lineTo(x_to, y_to);
+    this.gfx.closePath();
+    this.gfx.stroke();
+}
+
 export const setGameSize = (w, h) => {
     gfx.width = w;
     gfx.height = h;
