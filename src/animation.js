@@ -6,7 +6,6 @@ export class Animation {
     constructor(def) {
         const image = requireProperty(def, "image");
         this.spriteSheet = sprites[image];
-        console.log(sprites);
         this.timePerFrame = getPropertyOrDefault(def, "timePerFrame", 0.5);
         this.looping = getPropertyOrDefault(def, "looping", "once");
 
@@ -70,6 +69,13 @@ export class Animation {
             if(this.timeOnCurrentFrame >= this.timePerFrame) {
                 this.timeOnCurrentFrame = 0;
                 this.currentFrame += this.direction;
+
+                if(this.direction !== 0) {
+                    for(const listener of this.frameListeners) {
+                        listener(this.currentFrame, this);
+                    }
+                }
+
                 if(this.currentFrame >= this.numFrames || this.currentFrame < 0) {
                     // NOTE(istarnion): We support animating bot ways, in all modes.
                     switch(this.looping) {
@@ -85,6 +91,10 @@ export class Animation {
                             this.currentFrame -= 2 * this.numFrames;
                             this.direction *= -1;
                     }
+
+                    for(const listener of this.cycleListeners) {
+                        listener(this);
+                    }
                 }
             }
         }
@@ -97,7 +107,9 @@ export class Animation {
 
     reset() {
         this.currentFrame = 0;
+        this.timeOnCurrentFrame = 0;
         this.paused = false;
+        this.direction = 1;
     }
 
     addCycleListener(listener) {

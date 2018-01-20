@@ -1,10 +1,17 @@
 const canvas = document.getElementById("game-canvas");
 export const gfx = canvas.getContext("2d");
-gfx.save(); // Save the default scale (transform)
 
 // Turn off anti-aliasing for images.
-gfx.mozImageSmoothingEnabled = gfx.webkitImageSmoothingEnabled =
-    gfx.msImageSmoothingEnabled = gfx.imageSmoothingEnabled = false;
+const disableAntiAlias = () => {
+    gfx.mozImageSmoothingEnabled = false;
+    gfx.webkitImageSmoothingEnabled = false;
+    gfx.msImageSmoothingEnabled = false;
+    gfx.imageSmoothingEnabled = false;
+};
+
+const pixelRatio = !!window.devicePixelRatio ? window.devicePixelRatio : 1;
+gfx.scale(pixelRatio, pixelRatio);
+gfx.save(); // Save the default scale (transform)
 
 gfx.width = canvas.clientWidth;
 gfx.height = canvas.clientHeight;
@@ -32,12 +39,15 @@ const onResize = () => {
         if(scale > 1) scale = Math.floor(scale);
     }
 
-    canvas.width = gfx.width * scale;
-    canvas.height = gfx.height * scale;
+    canvas.width = (gfx.width * scale) * pixelRatio;
+    canvas.height = (gfx.height * scale) * pixelRatio;
+    canvas.style.width = `${gfx.width * scale}px`;
+    canvas.style.height = `${gfx.height * scale}px`;
 
-    gfx.restore(); // Restore default scale (1, 1)
+    gfx.restore(); // Restore default scale
     gfx.save();    // ...and save it again
-    gfx.scale(scale, scale);
+    gfx.scale(scale * pixelRatio, scale * pixelRatio);
+    disableAntiAlias();
 };
 
 window.addEventListener("resize", onResize);
@@ -83,8 +93,6 @@ export const loadImage = (image_to_load) => {
 
 // Load multiple images. Input format; [["name1", "file1"], ["name2", "file2"], ...]
 export const loadImages = (images_to_load) => {
-    console.assert(images_to_load);
-
     return new Promise((resolve, reject) => {
         if(images_to_load.length === 0) {
             resolve();
@@ -96,8 +104,6 @@ export const loadImages = (images_to_load) => {
         images_to_load.forEach((image) => {
             image_promises.push(loadImage(image));
         });
-
-        console.log(image_promises);
 
         Promise.all(image_promises)
         .then(() => {

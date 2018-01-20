@@ -1,6 +1,7 @@
 export const images = {
     // Key Value
-    water: "res/water.png" // This can actually be an internet URL too, I think. But probably shouldn't
+    water: "res/water.png", // This can actually be an internet URL too, I think. But probably shouldn't
+    slime: "res/slimeWIP.png"
 };
 
 export const animations = {
@@ -31,6 +32,45 @@ export const animations = {
             { x: 0, y: 0, w: 32, h: 32 },
             { x: 32, y: 0, w: 32, h: 32 },
             { x: 64, y: 0, w: 32, h: 32 }
+        ]
+    },
+    slimeIdle: {
+        image: "slime",
+        timePerFrame: 0.1,
+        looping: "loop",
+        frames: [
+            { x: 0, y: 0, w: 32, h: 32 },
+            { x: 32, y: 0, w: 32, h: 32 },
+            { x: 64, y: 0, w: 32, h: 32 },
+            { x: 96, y: 0, w: 32, h: 32 },
+            { x: 128, y: 0, w: 32, h: 32 },
+            { x: 160, y: 0, w: 32, h: 32 }
+        ]
+    },
+    slimeJump: {
+        image: "slime",
+        timePerFrame: 0.1,
+        looping: "once",
+        frames: [
+            { x: 0, y: 32, w: 32, h: 32 },
+            { x: 32, y: 32, w: 32, h: 32 },
+            { x: 64, y: 32, w: 32, h: 32 },
+            { x: 96, y: 32, w: 32, h: 32 },
+            { x: 128, y: 32, w: 32, h: 32 },
+            { x: 160, y: 32, w: 32, h: 32 }
+        ]
+    },
+    slimeDie: {
+        image: "slime",
+        timePerFrame: 0.1,
+        looping: "once",
+        frames: [
+            { x: 0, y: 64, w: 32, h: 32 },
+            { x: 32, y: 64, w: 32, h: 32 },
+            { x: 64, y: 64, w: 32, h: 32 },
+            { x: 96, y: 64, w: 32, h: 32 },
+            { x: 128, y: 64, w: 32, h: 32 },
+            { x: 160, y: 64, w: 32, h: 32 }
         ]
     }
 };
