@@ -1,6 +1,10 @@
 const canvas = document.getElementById("game-canvas");
 export const gfx = canvas.getContext("2d");
-gfx.save();
+gfx.save(); // Save the default scale (transform)
+
+// Turn off anti-aliasing for images.
+gfx.mozImageSmoothingEnabled = gfx.webkitImageSmoothingEnabled =
+    gfx.msImageSmoothingEnabled = gfx.imageSmoothingEnabled = false;
 
 gfx.width = canvas.clientWidth;
 gfx.height = canvas.clientHeight;
@@ -31,8 +35,8 @@ const onResize = () => {
     canvas.width = gfx.width * scale;
     canvas.height = gfx.height * scale;
 
-    gfx.restore();
-    gfx.save();
+    gfx.restore(); // Restore default scale (1, 1)
+    gfx.save();    // ...and save it again
     gfx.scale(scale, scale);
 };
 
@@ -90,10 +94,12 @@ export const loadImages = (images_to_load) => {
         const image_promises = [];
 
         images_to_load.forEach((image) => {
-            image_promises.push(this.loadImage(image));
+            image_promises.push(loadImage(image));
         });
 
-        image_promises.all
+        console.log(image_promises);
+
+        Promise.all(image_promises)
         .then(() => {
             resolve();
         })

@@ -19,7 +19,11 @@ npm start
 ```
 
 ## Notes
-You can get the normal canvas 2D context by `import gfx from "./graphics.js"`. In addition to the standard functions, I have added `drawLine(x0, y0, x1, y1)`. 
+You can get the normal canvas 2D context by `import { gfx } from "./graphics.js"`. In addition to the standard functions, I have added `drawLine(x0, y0, x1, y1)` for convenience.
+
+There is also an Animation class.
 
 We use Howler.js to simplify audio. Docs are [here](https://github.com/goldfire/howler.js#documentation).
+
+All assets are listed in assets.js
 
