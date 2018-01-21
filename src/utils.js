@@ -11,3 +11,16 @@ export const requireProperty = (obj, prop) => {
     }
 }
 
+// Removes the given element from the given array.
+// Returns true if the element was found and removed,
+// false otherwise.
+export const removeFromArray = (array, element) => {
+    const index = array.indexOf(element);
+    if(index >= 0) {
+        array.splice(index, 1);
+        return true;
+    }
+
+    return false;
+}
+

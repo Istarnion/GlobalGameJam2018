@@ -3,6 +3,7 @@ import { images, animations } from "./assets.js";
 import { Animation } from "./animation.js";
 import { input } from "./input.js";
 import { Slime } from "./slime.js";
+import { Howl, Howler } from "./howler.min.js";
 
 setGameSize(160, 120);
 
@@ -33,10 +34,15 @@ const update = () => {
     prevTime = now;
 
     input.update();
-    
+
     gfx.fillStyle = "#2D2D2D";
     gfx.fillRect(0, 0, gfx.width, gfx.height);
+
     slime.updateAndRender(deltaTime);
+
+    gfx.fillStyle = "white";
+    gfx.textAlign = "center";
+    gfx.fillText("Press SPACE!", gfx.width / 2, gfx.height / 2 - 32);
 
     w1.update(deltaTime);
     w2.update(deltaTime);

@@ -56,11 +56,27 @@ export const input = {
     },
 
     removeKeyDownListener: function(f) {
-        // TODO(istarnion): Implement!
+        for(const key in this.specificKeyDownListeners) {
+            if(this.specificKeyDownListeners.hasOwnProperty(key)) {
+                if(removeFromArray(this.specificKeyDownListeners[key], f)) {
+                    return;
+                }
+            }
+        }
+
+        removeFromArray(this.keyDownListeners, f);
     },
 
     removeKeyUpListener: function(f) {
-        // TODO(istarnion): Implement!
+        for(const key in this.specificKeyUpListeners) {
+            if(this.specificKeyUpListeners.hasOwnProperty(key)) {
+                if(removeFromArray(this.specificKeyUpListeners[key], f)) {
+                    return;
+                }
+            }
+        }
+
+        removeFromArray(this.keyUpListeners, f);
     },
 
     update: function() {
