@@ -1,4 +1,4 @@
-import { gfx, setGameSize, clear, loadImages } from "./graphics.js";
+import { gfx, setGameSize, clear, loadImages, getBitmap } from "./graphics.js";
 import { images, animations } from "./assets.js";
 import { Animation } from "./animation.js";
 import { input } from "./input.js";
@@ -25,6 +25,10 @@ const init = () => {
     w4 = new Animation(animations.water4);
 
     slime = new Slime(gfx.width / 2 - 16, gfx.height / 2 - 16);
+
+    const data = getBitmap("water");
+    console.log(data);
+    console.log(data.getPixel(10, 10));
 }
 
 const update = () => {

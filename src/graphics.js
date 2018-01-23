@@ -115,3 +115,44 @@ export const loadImages = (images_to_load) => {
     });
 };
 
+// Get the pixel data for the given image.
+// The image must have been loaded.
+// This function returns an object like this:
+// { width: ***, height: ***, pixels: ***..., getPixel(x, y)},
+// or null, if something goes wrong.
+// A single pixel is on the form { r: 0-255, g: 0-255, b: 0-255, a: 0-255 }
+export const getBitmap = (image) => {
+    const img = sprites[image];
+    if(!img) {
+        console.error(`${image} is not loaded`);
+        return null;
+    }
+
+    const tempCanvas = document.createElement("canvas");
+    const ctx = tempCanvas.getContext("2d");
+
+    tempCanvas.width = img.width;
+    tempCanvas.height = img.height;
+    ctx.clearRect(0, 0, img.width, img.height);
+    ctx.drawImage(img, 0, 0);
+
+    const result = {
+        width: img.width,
+        height: img.height,
+        pixels: ctx.getImageData(0, 0, img.width, img.height).data,
+        getPixel: function(x, y) {
+            const start = y * this.width * 4 + x * 4;
+            const pixel = {
+                r: this.pixels[start + 0],
+                g: this.pixels[start + 1],
+                b: this.pixels[start + 2],
+                a: this.pixels[start + 3]
+            };
+
+            return pixel;
+        }
+    };
+
+    return result;
+}
+
