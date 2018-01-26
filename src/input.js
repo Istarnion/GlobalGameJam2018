@@ -131,7 +131,10 @@ export const input = {
         d: false,
         q: false,
         e: false,
-        f: false
+        f: false,
+        one: false,
+        two: false,
+        three: false
     },
 
     prevKeyState: {
@@ -150,7 +153,10 @@ export const input = {
         d: false,
         q: false,
         e: false,
-        f: false
+        f: false,
+        one: false,
+        two: false,
+        three: false
     }
 };
 
@@ -173,6 +179,9 @@ const getKeyNameFromCode = (code) => {
         case "KeyQ": key = "q"; break;
         case "KeyE": key = "e"; break;
         case "KeyF": key = "f"; break;
+        case "Digit1": key = "one"; break;
+        case "Digit2": key = "two"; break;
+        case "Digit3": key = "three"; break;
         default: break;
     }
 
