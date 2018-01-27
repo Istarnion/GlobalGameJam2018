@@ -1,34 +1,20 @@
-import { gfx, setGameSize, clear, loadImages, getBitmap } from "./graphics.js";
-import { images, animations } from "./assets.js";
-import { Animation } from "./animation.js";
+import { gfx, setGameSize, clear, loadImages } from "./graphics.js";
+import { images } from "./assets.js";
 import { input } from "./input.js";
-import { Slime } from "./slime.js";
-import { Howl, Howler } from "./howler.min.js";
+import { Game } from "./game.js";
+import { maps } from "./maps.js";
 
-setGameSize(160, 120);
+setGameSize(800, 600);
 
 gfx.fillText("Loading...", gfx.width / 2, gfx.height / 2);
 
-let w1 = null;
-let w2 = null;
-let w3 = null;
-let w4 = null;
-
-let slime = null;
-
 let prevTime = performance.now();
 
+let game = null;
+
 const init = () => {
-    w1 = new Animation(animations.water1);
-    w2 = new Animation(animations.water2);
-    w3 = new Animation(animations.water3);
-    w4 = new Animation(animations.water4);
-
-    slime = new Slime(gfx.width / 2 - 16, gfx.height / 2 - 16);
-
-    const data = getBitmap("water");
-    console.log(data);
-    console.log(data.getPixel(10, 10));
+    game = new Game();
+    game.init();
 }
 
 const update = () => {
@@ -39,25 +25,7 @@ const update = () => {
 
     input.update();
 
-    gfx.fillStyle = "#2D2D2D";
-    gfx.fillRect(0, 0, gfx.width, gfx.height);
-
-    slime.updateAndRender(deltaTime);
-
-    gfx.fillStyle = "white";
-    gfx.textAlign = "center";
-    gfx.fillText("Press SPACE!", gfx.width / 2, gfx.height / 2 - 32);
-
-    w1.update(deltaTime);
-    w2.update(deltaTime);
-    w3.update(deltaTime);
-    w4.update(deltaTime);
-
-    w1.draw(0, gfx.height - 32);
-    w2.draw(32, gfx.height - 32);
-    w3.draw(64, gfx.height - 32);
-    w4.draw(96, gfx.height - 32);
-    w1.draw(128, gfx.height - 32);
+    game.updateAndRender(deltaTime);
 
     window.requestAnimationFrame(update);
 }
@@ -66,6 +34,19 @@ const imagesToLoad = [];
 for(const img in images) {
     if(images.hasOwnProperty(img)) {
         imagesToLoad.push([ img, images[img] ]);
+    }
+}
+
+for(let i=0; i<maps.length; ++i) {
+    const name = `level${i}_`;
+    imagesToLoad.push([ name+"tiles", maps[i].tiles ]);
+
+    if(maps[i].hasOwnProperty("wire")) {
+        imagesToLoad.push([ name+"wire", maps[i].wire ]);
+    }
+
+    if(maps[i].hasOwnProperty("decor")) {
+        imagesToLoad.push([ name+"decor", maps[i].decor ]);
     }
 }
 

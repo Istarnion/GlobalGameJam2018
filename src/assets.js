@@ -1,7 +1,7 @@
 export const images = {
     // Key Value
     water: "res/water.png", // This can actually be an internet URL too, I think. But probably shouldn't
-    slime: "res/slimeWIP.png"
+    slime: "res/slimeWIP.png",
 };
 
 export const animations = {

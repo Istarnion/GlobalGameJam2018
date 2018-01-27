@@ -6,20 +6,20 @@ export const input = {
 
     // Arguments: Either a keyname and function, or just a function
     isKeyDown: function(key) {
-        return !!this.currentKeyState[key];
+        return !!this.keyStates[key][0];
     },
 
     isKeyJustPressed: function(key) {
         const result =
-            !!this.currentKeyState[key] &&
-            !this.prevKeyState[key];
+            !!this.keyStates[key][0] &&
+            !this.keyStates[key][1];
         return result;
     },
 
     isKeyJustReleased: function(key) {
         const result =
-            !this.currentKeyState[key] &&
-            !!this.prevKeyState[key];
+            !this.keyStates[key][0] &&
+            !!this.keyStates[key][1];
         return result;
     },
 
@@ -83,8 +83,8 @@ export const input = {
         // Called by the main loop to broadcast events
         for(const key in this.currentKeyState) {
             if(this.currentKeyState.hasOwnProperty(key)) {
-                const currState = this.currentKeyState[key];
-                const prevState = this.prevKeyState[key];
+                const currState = this.keyStates[key][0];
+                const prevState = this.keyStates[key][1];
 
                 if(currState && !prevState) {
                     // console.log(`Key down: ${key}`);
@@ -110,53 +110,33 @@ export const input = {
                     }
                 }
 
-                this.prevKeyState[key] = this.currentKeyState[key];
+                this.keyStates[key][1] = this.keyStates[key][0];
             }
         }
     },
 
-    currentKeyState: {
-        z: false,
-        x: false,
-        c: false,
-        space: false,
-        enter: false,
-        up: false,
-        down: false,
-        left: false,
-        right: false,
-        w: false,
-        a: false,
-        s: false,
-        d: false,
-        q: false,
-        e: false,
-        f: false,
-        one: false,
-        two: false,
-        three: false
-    },
-
-    prevKeyState: {
-        z: false,
-        x: false,
-        c: false,
-        space: false,
-        enter: false,
-        up: false,
-        down: false,
-        left: false,
-        right: false,
-        w: false,
-        a: false,
-        s: false,
-        d: false,
-        q: false,
-        e: false,
-        f: false,
-        one: false,
-        two: false,
-        three: false
+    // NOTE(istarnion): Index 0 is current, 1 is previous
+    // This allows us to see what has changed from frame to frame
+    keyStates: {
+        z: [false, false],
+        x: [false, false],
+        c: [false, false],
+        space: [false, false],
+        enter: [false, false],
+        up: [false, false],
+        down: [false, false],
+        left: [false, false],
+        right: [false, false],
+        w: [false, false],
+        a: [false, false],
+        s: [false, false],
+        d: [false, false],
+        q: [false, false],
+        e: [false, false],
+        f: [false, false],
+        one: [false, false],
+        two: [false, false],
+        three: [false, false]
     }
 };
 
@@ -191,14 +171,14 @@ const getKeyNameFromCode = (code) => {
 window.addEventListener("keydown", (e) => {
     const key = getKeyNameFromCode(e.code);
     if(key) {
-        input.currentKeyState[key] = true;
+        input.keyStates[key][0] = true;
     }
 });
 
 window.addEventListener("keyup", (e) => {
     const key = getKeyNameFromCode(e.code);
     if(key) {
-        input.currentKeyState[key] = false;
+        input.keyStates[key][0] = false;
     }
 });
 

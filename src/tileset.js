@@ -1,8 +1,8 @@
-import { gfx, sprites } from "./graphics.js";
+import { gfx, images } from "./graphics.js";
 
 export class Tileset {
     constructor(image, tileWidth, tileHeight, margin, spacing) {
-        this.tilemap = sprites[image];
+        this.tilemap = images[image];
         this.width = tileWidth;
         this.height = tileHeight;
         this.margin = margin;
