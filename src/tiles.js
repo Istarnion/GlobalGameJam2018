@@ -1,20 +1,28 @@
 import { gfx } from "./graphics.js";
-
 // NOTE(istarnion): These values must match the indices in the tiles array.
 // This is bad, but I'm too sleepy to figure out a cleaner solution
 export const tileIDs = {
     floor: 0,
-    wall: 1
+    wall: 1,
+    powerblock: 2
 };
 
 export const tiles = [
     {
         id: tileIDs.floor,
-        solid: false
+        solid: false,
+
+        render: function(x, y) {
+            renderTile("#2D2D2D", x, y);
+        }
     },
     {
         id: tileIDs.wall,
-        solid: true
+        solid: true,
+
+        render: function(x, y) {
+            renderTile("#D2D2D2", x, y);
+        }
     }
 ];
 
@@ -43,8 +51,16 @@ export const colorToTileID = (color) => {
         (color.b << 0));
 
     switch(hex) {
+        // Robots have floors under them!
+        case 0xFF0000:
+        case 0x00FFFF:
+        case 0xB200FF:
         case 0xFFFFFF: return tileIDs.floor;
+
         case 0x0026FF: return tileIDs.wall;
+
+        case 0x808080: return tileIDs.powerblock;
+
         defualt:
             console.warning(`We don't support color 0x${hex.toString(16).toUpperCase()} (yet?)`);
             break;
@@ -64,21 +80,14 @@ export const createTile = (tile) => {
     return result;
 };
 
-export const renderTile = (tileData, x, y) => {
-    // NOTE(istarnion): This is temp code until we get a tile set!
-    switch(tileData.id) {
-        case tileIDs.floor:
-            gfx.fillStyle = "#2D2D2D";
-            break;
-        case tileIDs.wall:
-            gfx.fillStyle = "#D2D2D2";
-            break;
-        default:
-            gfx.fillStyle = "black";
-            break;
+export const renderTile = (colorOrImage, x, y) => {
+    if(typeof colorOrImage === "string") {
+        gfx.fillStyle = colorOrImage;
+        gfx.fillRect(48+x*32, 12+y*32, 32, 32);
     }
-
-    gfx.fillRect(48+x*32, 12+y*32, 32, 32);
+    else {
+        gfx.drawImage(colorOrImage, 48+x*32, 12+y*32, 32, 32);
+    }
 
     // For debug:
     //gfx.strokeStyle = "red";
