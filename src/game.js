@@ -59,7 +59,7 @@ export class Game {
             }
 
             if(input.isKeyJustPressed("space")) {
-                this.objects[0].powered = !this.objects[0].powered;
+                this.objects[4].powered = !this.objects[4].powered;
             }
 
             let move = null;

@@ -53,7 +53,6 @@ export class Robot {
         if(a) this.currAnim = this.animIdle;
         else this.currAnim = this.animDown;
         this.currAnim.reset();
-        console.log(this.currAnim);
     }
 
     setPosition(x, y) {

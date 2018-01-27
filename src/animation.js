@@ -104,7 +104,7 @@ export class Animation {
         }
     }
 
-    draw(x, y, offsetX, offsetY, dir) {
+    draw(x, y, offsetX = 0, offsetY = 0, dir = Directions.up) {
         gfx.save();
         gfx.translate(48+x*32+16, 12+y*32+16);
 

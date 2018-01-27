@@ -1,4 +1,5 @@
-import { renderTile } from "./tiles.js";
+import { animations } from "./assets.js";
+import { Animation } from "./animation.js";
 
 export class Powerblock {
     constructor(x, y) {
@@ -9,14 +10,13 @@ export class Powerblock {
         this.doors = [];
         this.isPowered = false;
 
-        this.currentSprite = "#444400";
+        this.sprite = new Animation(animations.powerBlock);
     }
 
     set powered(p) {
         this.isPowered = p;
 
-        // NOTE(istarnion): TEMP!
-        this.currentSprite = p ? "#AAAA00" : "#444400";
+        this.sprite.currentFrame = p ? 1 : 0;
 
         for(const wire of this.wires) {
             wire.powered = p;
@@ -32,7 +32,7 @@ export class Powerblock {
     }
 
     render() {
-        renderTile(this.currentSprite, this.x, this.y);
+        this.sprite.draw(this.x, this.y);
     }
 
     initWires() {

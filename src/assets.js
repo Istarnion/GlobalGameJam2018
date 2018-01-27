@@ -1,7 +1,4 @@
 export const images = {
-    // Key Value
-    water: "res/water.png", // This can actually be an internet URL too, I think. But probably shouldn't
-    slime: "res/slimeWIP.png",
     floor1: "res/sprites/FloorTileBaseAlt.png",
     wall1: "res/sprites/Wall1.png",
     wall2: "res/sprites/Wall2.png",
@@ -10,12 +7,21 @@ export const images = {
     powerBot: "res/sprites/PowerBot.png",
     magnetBot: "res/sprites/MagnetBot.png",
     mirrorBot: "res/sprites/RelayBot.png",
+
     wire_ne: "res/sprites/WireNE.png",
     wire_nw: "res/sprites/WireNW.png",
     wire_se: "res/sprites/WireSE.png",
     wire_sw: "res/sprites/WireSW.png",
     wire_h: "res/sprites/WireHorizontal.png",
-    wire_v: "res/sprites/WireVertical.png"
+    wire_v: "res/sprites/WireVertical.png",
+    wire_powered_ne: "res/sprites/WireNEPowered.png",
+    wire_powered_nw: "res/sprites/WireNWPowered.png",
+    wire_powered_se: "res/sprites/WireSEPowered.png",
+    wire_powered_sw: "res/sprites/WireSWPowered.png",
+    wire_powered_h: "res/sprites/WireHorizontalPowered.png",
+    wire_powered_v: "res/sprites/WireVerticalPowered.png",
+
+    powerBlock: "res/sprites/PowerBlock.png"
 };
 
 export const animations = {
@@ -33,7 +39,6 @@ export const animations = {
         looping: "loop",
         frames: [
             { x: 0, y: 0, w: 32, h: 32 },
-            { x: 32, y: 0, w: 32, h: 32 },
             { x: 64, y: 0, w: 32, h: 32 }
         ]
     },
@@ -61,7 +66,6 @@ export const animations = {
         looping: "loop",
         frames: [
             { x: 0, y: 0, w: 32, h: 32 },
-            { x: 32, y: 0, w: 32, h: 32 },
             { x: 64, y: 0, w: 32, h: 32 }
         ]
     },
@@ -89,7 +93,6 @@ export const animations = {
         looping: "loop",
         frames: [
             { x: 0, y: 0, w: 32, h: 32 },
-            { x: 32, y: 0, w: 32, h: 32 },
             { x: 64, y: 0, w: 32, h: 32 }
         ]
     },
@@ -101,6 +104,15 @@ export const animations = {
             { x: 64, y: 0, w: 32, h: 32 },
             { x: 96, y: 0, w: 32, h: 32 },
             { x: 128, y: 0, w: 32, h: 32 }
+        ]
+    },
+    powerBlock: {
+        image: "powerBlock",
+        timePerFrame: 0.0,
+        looping: "once",
+        frames: [
+            { x: 0, y: 0, w: 32, h: 32 },
+            { x: 32, y: 0, w: 32, h: 32 }
         ]
     }
 };

@@ -9,14 +9,22 @@ export class Wire {
 
         this.currentSprite = "#440000";
         this.sprite = null;
+        this.o = "";
     }
 
     set orientation(o) {
+        this.o = o;
         this.sprite = sprites[`wire_${o}`];
     }
 
     set powered(p) {
         this.isPowered = p;
+        if(p) {
+            this.sprite = sprites[`wire_powered_${this.o}`];
+        }
+        else {
+            this.sprite = sprites[`wire_${this.o}`];
+        }
     }
 
     get powered() {
