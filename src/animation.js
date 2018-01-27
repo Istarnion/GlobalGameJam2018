@@ -111,13 +111,13 @@ export class Animation {
         switch(dir) {
             case Directions.up: break;
             case Directions.right:
-                gfx.rotate(Math.PI / -2)
+                gfx.rotate(Math.PI / 2)
                 break;
             case Directions.down:
                 gfx.rotate(Math.PI);
                 break;
             case Directions.left:
-                gfx.rotate(Math.PI / 2);
+                gfx.rotate(Math.PI / -2);
                 break;
         }
 

@@ -2,8 +2,7 @@ import { gfx, getBitmap } from "./graphics.js";
 import { input } from "./input.js";
 
 import { tileIDs, colorToTileID, createTile, renderTile } from "./tiles.js";
-import { maps } from "./maps.js";
-
+import { maps } from "./maps.js"; 
 import { Powerblock } from "./powerblock.js";
 import { Wire } from "./wire.js";
 import { Door } from "./door.js";
@@ -281,6 +280,8 @@ export class Game {
                         visitNeighbours(currCoord);
                     }
                     while(openList.length > 0);
+
+                    powerblock.initWires();
                 }
             }
         }

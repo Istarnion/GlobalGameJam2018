@@ -9,7 +9,13 @@ export const images = {
     emitter: "res/sprites/Emitter.png",
     powerBot: "res/sprites/PowerBot.png",
     magnetBot: "res/sprites/MagnetBot.png",
-    mirrorBot: "res/sprites/RelayBot.png"
+    mirrorBot: "res/sprites/RelayBot.png",
+    wire_ne: "res/sprites/WireNE.png",
+    wire_nw: "res/sprites/WireNW.png",
+    wire_se: "res/sprites/WireSE.png",
+    wire_sw: "res/sprites/WireSW.png",
+    wire_h: "res/sprites/WireHorizontal.png",
+    wire_v: "res/sprites/WireVertical.png"
 };
 
 export const animations = {
