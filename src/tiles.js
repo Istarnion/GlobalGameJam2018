@@ -4,9 +4,10 @@ import { gfx, drawSprite } from "./graphics.js";
 export const tileIDs = {
     floor: 0,
     wall: 1,
-    powerblock: 2,
-    wire: 3,
-    door: 4
+    chasm: 2,
+    powerblock: 10,
+    wire: 11,
+    door: 12,
 };
 
 export const tiles = [
@@ -24,6 +25,14 @@ export const tiles = [
 
         render: function(x, y) {
             renderTile("#D2D2D2", x, y);
+        }
+    },
+    {
+        id: tileIDs.chasm,
+        solid: true,
+
+        render: function(x, y) {
+            renderTile("black", x, y);
         }
     }
 ];
@@ -53,10 +62,11 @@ export const colorToTileID = (color) => {
         (color.b << 0));
 
     switch(hex) {
-        // Robots have floors under them!
+        // Robots have floors under them! Blocks too!
         case 0xFF0000:
         case 0x00FFFF:
         case 0xB200FF:
+        case 0x7F0000:
         case 0xFFFFFF: return tileIDs.floor;
 
         case 0x0026FF: return tileIDs.wall;
@@ -65,8 +75,10 @@ export const colorToTileID = (color) => {
         case 0xFF7F7F: return tileIDs.wire;
         case 0x267F00: return tileIDs.door;
 
+        case 0x000000: return tileIDs.chasm;
+
         defualt:
-            console.warning(`We don't support color 0x${hex.toString(16).toUpperCase()} (yet?)`);
+            console.warn(`We don't support color 0x${hex.toString(16).toUpperCase()} (yet?)`);
             break;
     }
 };

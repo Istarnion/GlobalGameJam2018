@@ -7,14 +7,13 @@ import { maps } from "./maps.js";
 import { Powerblock } from "./powerblock.js";
 import { Wire } from "./wire.js";
 import { Door } from "./door.js";
+import { Block } from "./block.js";
 
 import { RobotTypes, Robot } from "./robot.js";
 import { Directions } from "./utils.js";
 
 export class Game {
-    constructor() {
-        this.currentLevel = 0;
-        this.level = {};
+    constructor() { this.currentLevel = 0; this.level = {};
         this.width = 22;
         this.height = 18;
 
@@ -155,7 +154,6 @@ export class Game {
 
             if(!blocked) {
                 for(const r of [this.magnetBot, this.powerBot, this.mirrorBot]) {
-                    console.log(r);
                     if(r !== robot) {
                         if(x === r.x && y === r.y) {
                             blocked = true;
@@ -206,8 +204,12 @@ export class Game {
                         case 0xB200FF:
                             this.magnetBot.setPosition(x, y);
                             break;
+                        case 0x7F0000:
+                            this.objects.push(new Block(x, y));
+                            break;
                         default:
-                            console.warning("Bug in level loading robot logic");
+                            console.warn(hex.toString(16));
+                            console.warn("Bug in level loading robot logic");
                             break;
                     }
                 }
