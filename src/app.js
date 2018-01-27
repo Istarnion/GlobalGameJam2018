@@ -3,6 +3,7 @@ import { images } from "./assets.js";
 import { input } from "./input.js";
 import { Game } from "./game.js";
 import { maps } from "./maps.js";
+import { musicManager } from "./musicManager";
 
 setGameSize(800, 600);
 
@@ -15,6 +16,8 @@ let game = null;
 const init = () => {
     game = new Game();
     game.init();
+    musicManager.beginLevel();
+    
 }
 
 const update = () => {
