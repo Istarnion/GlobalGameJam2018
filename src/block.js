@@ -17,3 +17,4 @@ export class Block {
         // renderTile(this.currentSprite, this.x, this.y);
     }
 }
+

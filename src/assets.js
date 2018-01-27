@@ -23,10 +23,30 @@ export const images = {
 
     powerBlock: "res/sprites/PowerBlock.png",
     horizontalDoor: "res/sprites/DoorVertical.png",
-    verticalDoor: "res/sprites/DoorHorizontal.png"
+    verticalDoor: "res/sprites/DoorHorizontal.png",
+
+    laser: "res/sprites/LaserbeamGREEN.png"
 };
 
 export const animations = {
+    emitter: {
+        image: "emitter",
+        timePerFrame: 0.3,
+        looping: "once",
+        frames: [
+            { x: 0, y: 0, w: 32, h: 32 },
+            { x: 32, y: 0, w: 32, h: 32 }
+        ]
+    },
+    laser: {
+        image: "laser",
+        timePerFrame: 0.05,
+        looping: "loop",
+        frames: [
+            { x: 0, y: 0, w: 32, h: 32 },
+            { x: 32, y: 0, w: 32, h: 32 }
+        ]
+    },
     powerBotDown: {
         image: "powerBot",
         timePerFrame: 0.3,

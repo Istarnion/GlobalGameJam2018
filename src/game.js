@@ -7,6 +7,8 @@ import { Powerblock } from "./powerblock.js";
 import { Wire } from "./wire.js";
 import { Door } from "./door.js";
 import { Block } from "./block.js";
+import { Emitter } from "./emitter.js";
+import { LaserBeam } from "./laserbeam.js";
 
 import { RobotTypes, Robot } from "./robot.js";
 import { Directions } from "./utils.js";
@@ -17,6 +19,7 @@ export class Game {
         this.height = 18;
 
         this.objects = [];
+        this.emitter = null;
 
         this.powerBot = new Robot(RobotTypes.power);
         this.magnetBot = new Robot(RobotTypes.magnet);
@@ -31,6 +34,7 @@ export class Game {
 
     init() {
         this.level = this.loadCurrentLevel();
+        this.updateEmitterLaser();
     }
 
     updateAndRender(delta) {
@@ -56,10 +60,6 @@ export class Game {
                     this.activeBot = this.mirrorBot;
                     this.activeBot.active = true;
                 }
-            }
-
-            if(input.isKeyJustPressed("space")) {
-                this.objects[4].powered = !this.objects[4].powered;
             }
 
             let move = null;
@@ -93,11 +93,11 @@ export class Game {
                 }
 
                 this.activeBot.move(move, targetX, targetY);
+
+                this.updateEmitterLaser();
             }
         }
-        else if(this.state === "fadingIn") {
-            this.fadeLevel = Math.max(0, this.fadeLevel - delta);
-            if(this.fadeLevel === 0) {
+        else if(this.state === "fadingIn") { this.fadeLevel = Math.max(0, this.fadeLevel - delta); if(this.fadeLevel === 0) {
                 this.state = "normal";
             }
         }
@@ -127,6 +127,7 @@ export class Game {
                 obj.update(delta);
             }
         }
+
 
         // If level complete, fade out. If no more levels, go to victory screen, else load next level
 
@@ -185,6 +186,47 @@ export class Game {
         return !blocked;
     }
 
+    updateEmitterLaser() {
+        this.emitter.laserBeams.length = 0;
+        const currCoord = { x: this.emitter.x, y: this.emitter.y };
+        let currDir = this.emitter.direction;
+        while(true) {
+            switch(currDir) {
+                case Directions.up:    --currCoord.y; break;
+                case Directions.right: ++currCoord.x; break;
+                case Directions.down:  ++currCoord.y; break;
+                case Directions.left:  --currCoord.x; break;
+                default: break;
+            }
+
+            let blocked = false;
+            const targetTile = this.getTileAt(currCoord.x, currCoord.y);
+            if(!!targetTile && targetTile.solid && targetTile.id !== tileIDs.chasm) {
+                blocked = true;
+            }
+            else {
+                for(const obj of this.objects) {
+                    if(obj.x === currCoord.x && obj.y === currCoord.y && !!obj.solid) {
+                        blocked = true;
+                        break;
+                    }
+                }
+
+                if(!blocked) {
+                    for(const r of [this.magnetBot, this.powerBot, this.mirrorBot]) {
+                        if(currCoord.x === r.x && currCoord.y === r.y) {
+                            blocked = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if(blocked) break;
+            else this.emitter.laserBeams.push(new LaserBeam(currCoord.x, currCoord.y, currDir));
+        }
+    }
+
     loadCurrentLevel() {
         const levelName = `level${this.currentLevel}`;
         return this.loadLevel(levelName);
@@ -224,6 +266,22 @@ export class Game {
                             break;
                         case 0x7F0000:
                             this.objects.push(new Block(x, y));
+                            break;
+                        case 0xFFD800:
+                            this.emitter = new Emitter(x, y);
+                            this.objects.push(this.emitter);
+                            break;
+                        case 0xFF6A00:
+                            // Mirror (up)
+                            break;
+                        case 0x57007F:
+                            // Mirror SW
+                            break;
+                        case 0x7F6A00:
+                            // Mirror SE
+                            break;
+                        case 0x00FF21:
+                            // Goal
                             break;
                         default:
                             console.warn(hex.toString(16));
