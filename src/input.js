@@ -118,19 +118,12 @@ export const input = {
     // NOTE(istarnion): Index 0 is current, 1 is previous
     // This allows us to see what has changed from frame to frame
     keyStates: {
-        z: [false, false],
-        x: [false, false],
-        c: [false, false],
         space: [false, false],
         enter: [false, false],
         up: [false, false],
         down: [false, false],
         left: [false, false],
         right: [false, false],
-        w: [false, false],
-        a: [false, false],
-        s: [false, false],
-        d: [false, false],
         q: [false, false],
         e: [false, false],
         f: [false, false],
@@ -152,10 +145,10 @@ const getKeyNameFromCode = (code) => {
         case "ArrowDown": key = "down"; break;
         case "ArrowLeft": key = "left"; break;
         case "ArrowRight": key = "right"; break;
-        case "KeyW": key = "w"; break;
-        case "KeyA": key = "a"; break;
-        case "KeyS": key = "s"; break;
-        case "KeyD": key = "d"; break;
+        case "KeyW": key = "up"; break;
+        case "KeyA": key = "left"; break;
+        case "KeyS": key = "down"; break;
+        case "KeyD": key = "right"; break;
         case "KeyQ": key = "q"; break;
         case "KeyE": key = "e"; break;
         case "KeyF": key = "f"; break;
