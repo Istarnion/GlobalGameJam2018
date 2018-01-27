@@ -27,23 +27,23 @@ class MusicManager {
         // Load ambientSounds
         this.ambientSounds = [];
         this.ambientSounds.push(
-            new Howl({ src: ['ambience_01.ogg'] }),
-            new Howl({ src: ['ambience_02.ogg'] }),
-            new Howl({ src: ['ambience_03.ogg'] }),
-            new Howl({ src: ['ambience_04.ogg'] }),
-            new Howl({ src: ['ambience_05.ogg'] }),
-            new Howl({ src: ['ambience_06.ogg'] }),
-            new Howl({ src: ['ambience_07.ogg'] }),
-            new Howl({ src: ['ambience_08.ogg'] }),
-            new Howl({ src: ['ambience_09.ogg'] }),
-            new Howl({ src: ['ambience_10.ogg'] })
+            new Howl({ src: ['res/sounds/ambience_01.ogg'] }),
+            new Howl({ src: ['res/sounds/ambience_02.ogg'] }),
+            new Howl({ src: ['res/sounds/ambience_03.ogg'] }),
+            new Howl({ src: ['res/sounds/ambience_04.ogg'] }),
+            new Howl({ src: ['res/sounds/ambience_05.ogg'] }),
+            new Howl({ src: ['res/sounds/ambience_06.ogg'] }),
+            new Howl({ src: ['res/sounds/ambience_07.ogg'] }),
+            new Howl({ src: ['res/sounds/ambience_08.ogg'] }),
+            new Howl({ src: ['res/sounds/ambience_09.ogg'] }),
+            new Howl({ src: ['res/sounds/ambience_10.ogg'] })
         );
     }
-    udate (deltaTime) { 
+    update (deltaTime) { 
         this.timeToPlayAmbientsound -= deltaTime;
-        if (this.timeToPlayAmbientsound >= 0 ) {
+        if (this.timeToPlayAmbientsound <= 0 ) {
             this.timeToPlayAmbientsound = 7 + Math.random() * 15 - 7;
-            playAmbient(Math.floor(Math.random() * 10));
+            this.playAmbient(Math.floor(Math.random() * 10));
         }
     }
 
@@ -66,7 +66,7 @@ class MusicManager {
     }
 
     playAmbient (index) {
-        this.ambientSounds[index];
+        this.ambientSounds[index].play();
     }
 
 }

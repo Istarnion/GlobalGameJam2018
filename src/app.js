@@ -17,7 +17,6 @@ const init = () => {
     game = new Game();
     game.init();
     musicManager.beginLevel();
-    
 }
 
 const update = () => {
@@ -27,6 +26,7 @@ const update = () => {
     prevTime = now;
 
     input.update();
+    musicManager.update(deltaTime);
 
     game.updateAndRender(deltaTime);
 
