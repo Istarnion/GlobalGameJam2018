@@ -1,4 +1,5 @@
-import { getBitmap } from "./graphics.js";
+import { gfx, getBitmap } from "./graphics.js";
+import { input } from "./input.js";
 
 import { tileIDs, colorToTileID, createTile, renderTile } from "./tiles.js";
 import { maps } from "./maps.js";
@@ -6,6 +7,8 @@ import { maps } from "./maps.js";
 import { Powerblock } from "./powerblock.js";
 import { Wire } from "./wire.js";
 import { Door } from "./door.js";
+
+import { RobotTypes, Robot } from "./robot.js";
 
 export class Game {
     constructor() {
@@ -15,6 +18,15 @@ export class Game {
         this.height = 18;
 
         this.objects = [];
+
+        this.powerBot = new Robot(RobotTypes.power);
+        this.magnetBot = new Robot(RobotTypes.magnet);
+        this.mirrorBot = new Robot(RobotTypes.mirror);
+
+        this.activeBot = this.powerBot;
+
+        this.state = "fadingIn";
+        this.fadeLevel = 1.0;
     }
 
     init() {
@@ -22,7 +34,46 @@ export class Game {
     }
 
     updateAndRender(delta) {
-        // TODO(istarnion): Update game logic
+        if(this.state === "normal") {
+            // Check for input, game logic
+            if(input.isKeyDown("one")) {
+                this.activeBot = this.powerBot;
+            }
+            else if(input.isKeyDown("two")) {
+                this.activeBot = this.magnetBot;
+            }
+            else if(input.isKeyDown("three")) {
+                this.activeBot = this.mirrorBot;
+            }
+
+            if(input.isKeyJustPressed("space")) {
+                this.objects[0].powered = !this.objects[0].powered;
+            }
+        }
+        else if(this.state === "fadingIn") {
+            this.fadeLevel = Math.max(0, this.fadeLevel - delta);
+            if(this.fadeLevel === 0) {
+                this.state = "normal";
+            }
+        }
+        else if(this.state === "fadingIn") {
+            this.fadeLevel = Math.min(1, this.fadeLevel + delta);
+            if(this.fadeLevel === 1) {
+                this.currentLevel++;
+                if(this.currentLevel >= maps.length) {
+                    // Game complete
+                }
+                else {
+                    this.level = this.loadCurrentLevel();
+                    this.state = "fadingIn";
+                }
+            }
+        }
+
+        this.powerBot.update(delta);
+        this.magnetBot.update(delta);
+        this.mirrorBot.update(delta);
+
         // If level complete, fade out. If no more levels, go to victory screen, else load next level
 
         // Render tiles:
@@ -32,13 +83,19 @@ export class Game {
                 if(tile.hasOwnProperty("render")) {
                     tile.render(x, y);
                 }
-                // TODO(istarnion): Render wires!
             }
         }
 
         for(const obj of this.objects) {
             obj.render();
         }
+
+        this.powerBot.render();
+        this.magnetBot.render();
+        this.mirrorBot.render();
+
+        gfx.fillStyle = `rgba(0, 0, 0, ${this.fadeLevel})`;
+        gfx.fillRect(0, 0, gfx.width, gfx.height);
     }
 
     getTileAt(x, y) {
@@ -74,13 +131,13 @@ export class Game {
 
                     switch(hex) {
                         case 0xFF0000:
-                            // Robot Relay
+                            this.mirrorBot.setPosition(x, y);
                             break;
                         case 0x00FFFF:
-                            // Robot Power
+                            this.powerBot.setPosition(x, y);
                             break;
                         case 0xB200FF:
-                            // Robot Magnet
+                            this.magnetBot.setPosition(x, y);
                             break;
                         default:
                             console.warning("Bug in level loading robot logic");

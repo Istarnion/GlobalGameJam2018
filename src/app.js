@@ -28,6 +28,8 @@ const update = () => {
     game.updateAndRender(deltaTime);
 
     window.requestAnimationFrame(update);
+
+    input.lateUpdate();
 }
 
 const imagesToLoad = [];

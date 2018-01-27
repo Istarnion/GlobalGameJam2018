@@ -11,7 +11,7 @@ export const input = {
 
     isKeyJustPressed: function(key) {
         const result =
-            !!this.keyStates[key][0] &&
+            this.keyStates[key][0] &&
             !this.keyStates[key][1];
         return result;
     },
@@ -19,7 +19,7 @@ export const input = {
     isKeyJustReleased: function(key) {
         const result =
             !this.keyStates[key][0] &&
-            !!this.keyStates[key][1];
+            this.keyStates[key][1];
         return result;
     },
 
@@ -81,10 +81,10 @@ export const input = {
 
     update: function() {
         // Called by the main loop to broadcast events
-        for(const key in this.currentKeyState) {
-            if(this.currentKeyState.hasOwnProperty(key)) {
-                const currState = this.keyStates[key][0];
-                const prevState = this.keyStates[key][1];
+        for(const key in this.keyStates) {
+            if(this.keyStates.hasOwnProperty(key)) {
+                const currState = !!this.keyStates[key][0];
+                const prevState = !!this.keyStates[key][1];
 
                 if(currState && !prevState) {
                     // console.log(`Key down: ${key}`);
@@ -109,8 +109,14 @@ export const input = {
                         listener(key);
                     }
                 }
+            }
+        }
+    },
 
-                this.keyStates[key][1] = this.keyStates[key][0];
+    lateUpdate: function() {
+        for(const key in this.keyStates) {
+            if(this.keyStates.hasOwnProperty(key)) {
+                this.keyStates[key][1] = !!this.keyStates[key][0];
             }
         }
     },

@@ -24,3 +24,10 @@ export const removeFromArray = (array, element) => {
     return false;
 }
 
+export const Directions = {
+    up: 0,
+    down: 1,
+    left: 2,
+    right: 3
+};
+
