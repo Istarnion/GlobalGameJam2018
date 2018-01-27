@@ -16,9 +16,7 @@ export class Animation {
             // Animation strip
             const frameWidth = this.spriteSheet.width / def.frames;
             const frameHeight = this.spriteSheet.height;
-            for(let i=0; i<def.frames; ++i) {
-                this.frames.push({
-                    x: i * frameWidth,
+            for(let i=0; i<def.frames; ++i) { this.frames.push({ x: i * frameWidth,
                     y: 0,
                     w: frameWidth,
                     h: frameHeight
@@ -106,7 +104,7 @@ export class Animation {
 
     draw(x, y, offsetX = 0, offsetY = 0, dir = Directions.up) {
         gfx.save();
-        gfx.translate(48+x*32+16, 12+y*32+16);
+        gfx.translate(48+x*32+16+offsetX, 12+y*32+16+offsetY);
 
         switch(dir) {
             case Directions.up: break;
