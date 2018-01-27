@@ -9,6 +9,7 @@ import { Wire } from "./wire.js";
 import { Door } from "./door.js";
 
 import { RobotTypes, Robot } from "./robot.js";
+import { Directions } from "./utils.js";
 
 export class Game {
     constructor() {
@@ -49,6 +50,39 @@ export class Game {
             if(input.isKeyJustPressed("space")) {
                 this.objects[0].powered = !this.objects[0].powered;
             }
+
+            let move = null;
+            if(input.isKeyDown("up")) {
+                move = Directions.up;
+            }
+            else if(input.isKeyDown("right")) {
+                move = Directions.right;
+            }
+            else if(input.isKeyDown("left")) {
+                move = Directions.left;
+            }
+            else if(input.isKeyDown("down")) {
+                move = Directions.down;
+            }
+
+            if(move !== null) {
+                this.state = "animating";
+
+                let targetX = this.activeBot.x;
+                let targetY = this.activeBot.y;
+                if(move === Directions.up) targetY--;
+                else if(move === Directions.right) targetX++;
+                else if(move === Directions.down) targetY++;
+                else if(move === Directions.left) targetX--;
+
+                if(!this.canRobotWalkTo(this.activeBot, targetX, targetY)) {
+                    // U cannot go here!
+                    targetX = this.activeBot.x;
+                    targetY = this.activeBot.y;
+                }
+
+                this.activeBot.move(move, targetX, targetY);
+            }
         }
         else if(this.state === "fadingIn") {
             this.fadeLevel = Math.max(0, this.fadeLevel - delta);
@@ -68,6 +102,9 @@ export class Game {
                     this.state = "fadingIn";
                 }
             }
+        }
+        else {
+            if(!this.activeBot.moving) this.state = "normal";
         }
 
         this.powerBot.update(delta);
@@ -100,6 +137,36 @@ export class Game {
 
     getTileAt(x, y) {
         return this.level[y][x];
+    }
+
+    canRobotWalkTo(robot, x, y) {
+        let blocked = false;
+        const targetTile = this.getTileAt(x, y);
+        if(!!targetTile && targetTile.solid) {
+            blocked = true;
+        }
+        else {
+            for(const obj of this.objects) {
+                if(obj.x === x && obj.y === y && !!obj.solid) {
+                    blocked = true;
+                    break;
+                }
+            }
+
+            if(!blocked) {
+                for(const r of [this.magnetBot, this.powerBot, this.mirrorBot]) {
+                    console.log(r);
+                    if(r !== robot) {
+                        if(x === r.x && y === r.y) {
+                            blocked = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return !blocked;
     }
 
     loadCurrentLevel() {

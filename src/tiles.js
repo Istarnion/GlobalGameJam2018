@@ -1,4 +1,4 @@
-import { gfx } from "./graphics.js";
+import { gfx, drawSprite } from "./graphics.js";
 // NOTE(istarnion): These values must match the indices in the tiles array.
 // This is bad, but I'm too sleepy to figure out a cleaner solution
 export const tileIDs = {
@@ -85,13 +85,7 @@ export const createTile = (tile) => {
 };
 
 export const renderTile = (colorOrImage, x, y) => {
-    if(typeof colorOrImage === "string") {
-        gfx.fillStyle = colorOrImage;
-        gfx.fillRect(48+x*32, 12+y*32, 32, 32);
-    }
-    else {
-        gfx.drawImage(colorOrImage, 48+x*32, 12+y*32, 32, 32);
-    }
+    drawSprite(colorOrImage, x, y);
 
     // For debug:
     //gfx.strokeStyle = "red";

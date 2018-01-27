@@ -156,3 +156,13 @@ export const getBitmap = (image) => {
     return result;
 }
 
+export const drawSprite = (colorOrImage, x, y, offsetX = 0, offsetY = 0) => {
+    if(typeof colorOrImage === "string") {
+        gfx.fillStyle = colorOrImage;
+        gfx.fillRect(48+x*32+offsetX, 12+y*32+offsetY, 32, 32);
+    }
+    else {
+        gfx.drawImage(colorOrImage, 48+x*32, 12+y*32, 32, 32);
+    }
+}
+

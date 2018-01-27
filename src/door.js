@@ -12,6 +12,7 @@ export class Door {
 
     set open(o) {
         this.isOpen = o;
+        this.solid = !o;
         this.currentSprite = o ? "#2D2D2D" : "#D2D2D2";
     }
 
