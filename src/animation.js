@@ -1,5 +1,6 @@
 import { gfx, sprites } from "./graphics.js";
 import { getPropertyOrDefault, requireProperty } from "./utils.js";
+import { Directions } from "./utils.js";
 
 export class Animation {
 
@@ -88,8 +89,11 @@ export class Animation {
                             this.currentFrame = this.numFrames - 1 - this.currentFrame;
                             break;
                         case "ping-pong":
-                            this.currentFrame -= 2 * this.numFrames;
+                            if(this.currentFrame < 0) this.currentFrame = 0;
+                            else if(this.currentFrame >= this.numFrames) this.currentFrame = this.numFrames - 1;
+                            this.currentFrame -= this.direction;
                             this.direction *= -1;
+                            break;
                     }
 
                     for(const listener of this.cycleListeners) {
@@ -100,9 +104,27 @@ export class Animation {
         }
     }
 
-    draw(x, y) {
+    draw(x, y, offsetX, offsetY, dir) {
+        gfx.save();
+        gfx.translate(48+x*32+16, 12+y*32+16);
+
+        switch(dir) {
+            case Directions.up: break;
+            case Directions.right:
+                gfx.rotate(Math.PI / -2)
+                break;
+            case Directions.down:
+                gfx.rotate(Math.PI);
+                break;
+            case Directions.left:
+                gfx.rotate(Math.PI / 2);
+                break;
+        }
+
         const frame = this.frames[this.currentFrame];
-        gfx.drawImage(this.spriteSheet, frame.x, frame.y, frame.w, frame.h, x, y, frame.w, frame.h);
+        gfx.drawImage(this.spriteSheet, frame.x, frame.y, frame.w, frame.h, -16, -16, 32, 32);
+
+        gfx.restore();
     }
 
     reset() {

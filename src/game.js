@@ -24,6 +24,7 @@ export class Game {
         this.mirrorBot = new Robot(RobotTypes.mirror);
 
         this.activeBot = this.powerBot;
+        this.activeBot.active = true;
 
         this.state = "fadingIn";
         this.fadeLevel = 1.0;
@@ -37,13 +38,25 @@ export class Game {
         if(this.state === "normal") {
             // Check for input, game logic
             if(input.isKeyDown("one")) {
-                this.activeBot = this.powerBot;
+                if(this.activeBot !== this.powerBot) {
+                    this.activeBot.active = false;
+                    this.activeBot = this.powerBot;
+                    this.activeBot.active = true;
+                }
             }
             else if(input.isKeyDown("two")) {
-                this.activeBot = this.magnetBot;
+                if(this.activeBot !== this.magnetBot) {
+                    this.activeBot.active = false;
+                    this.activeBot = this.magnetBot;
+                    this.activeBot.active = true;
+                }
             }
             else if(input.isKeyDown("three")) {
-                this.activeBot = this.mirrorBot;
+                if(this.activeBot !== this.mirrorBot) {
+                    this.activeBot.active = false;
+                    this.activeBot = this.mirrorBot;
+                    this.activeBot.active = true;
+                }
             }
 
             if(input.isKeyJustPressed("space")) {

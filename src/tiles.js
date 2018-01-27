@@ -1,10 +1,11 @@
-import { gfx, drawSprite } from "./graphics.js";
+import { gfx, sprites, drawSprite } from "./graphics.js";
 // NOTE(istarnion): These values must match the indices in the tiles array.
 // This is bad, but I'm too sleepy to figure out a cleaner solution
 export const tileIDs = {
     floor: 0,
     wall: 1,
     chasm: 2,
+    emitter: 3,
     powerblock: 10,
     wire: 11,
     door: 12,
@@ -14,27 +15,30 @@ export const tiles = [
     {
         id: tileIDs.floor,
         solid: false,
+        sprite: "floor1",
 
         render: function(x, y) {
-            renderTile("#2D2D2D", x, y);
+            renderTile(sprites[this.sprite], x, y);
         }
     },
     {
         id: tileIDs.wall,
         solid: true,
+        sprite: "wall1",
 
         render: function(x, y) {
-            renderTile("#D2D2D2", x, y);
+            renderTile(sprites[this.sprite], x, y);
         }
     },
     {
         id: tileIDs.chasm,
         solid: true,
+        sprite: "chasm",
 
         render: function(x, y) {
-            renderTile("black", x, y);
+            renderTile(sprites[this.sprite], x, y);
         }
-    }
+    },
 ];
 
 export const colorToTileID = (color) => {
@@ -67,6 +71,10 @@ export const colorToTileID = (color) => {
         case 0x00FFFF:
         case 0xB200FF:
         case 0x7F0000:
+        case 0x57007F:
+        case 0x7F6A00:
+        case 0xFFD800:
+        case 0x00FF21:
         case 0xFFFFFF: return tileIDs.floor;
 
         case 0x0026FF: return tileIDs.wall;
@@ -76,6 +84,7 @@ export const colorToTileID = (color) => {
         case 0x267F00: return tileIDs.door;
 
         case 0x000000: return tileIDs.chasm;
+
 
         defualt:
             console.warn(`We don't support color 0x${hex.toString(16).toUpperCase()} (yet?)`);
