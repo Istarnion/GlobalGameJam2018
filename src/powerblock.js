@@ -4,6 +4,7 @@ export class Powerblock {
     constructor(x, y) {
         this.x = x;
         this.y = y;
+        this.solid = true;
         this.wires = [];
         this.doors = [];
         this.isPowered = false;

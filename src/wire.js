@@ -4,6 +4,7 @@ export class Wire {
     constructor(x, y) {
         this.x = x;
         this.y = y;
+        this.solid = false;
         this.isPowered = false;
 
         this.currentSprite = "#440000";

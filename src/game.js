@@ -39,8 +39,6 @@ export class Game {
         for(const obj of this.objects) {
             obj.render();
         }
-
-        // TODO(istarnion): Render objects ( ? Or are robots objects? )
     }
 
     getTileAt(x, y) {
@@ -55,14 +53,40 @@ export class Game {
     loadLevel(name) {
         const tiles = getBitmap(`${name}_tiles`);
         const wires = getBitmap(`${name}_wire`);
-        //const decor = getBitmap(`${name}_decor`);
+        //const decor = getBitmap(`${name}_decor`); // NOTE(istarnion): I want, but not critical
         const map = [];
 
         for(let y = 0; y<tiles.height; ++y) {
             map.push([]);
             for(let x=0; x<tiles.width; ++x) {
-                const tileID = colorToTileID(tiles.getPixel(x, y));
+                const color = tiles.getPixel(x, y);
+                const tileID = colorToTileID(color);
                 map[y].push(createTile(tileID));
+
+                // Check for robot
+                if(tileID === tileIDs.floor) {
+                    const hex = (
+                        (color.r << 16) |
+                        (color.g << 8)  |
+                        (color.b << 0));
+
+                    if(hex === 0xFFFFFF) continue;
+
+                    switch(hex) {
+                        case 0xFF0000:
+                            // Robot Relay
+                            break;
+                        case 0x00FFFF:
+                            // Robot Power
+                            break;
+                        case 0xB200FF:
+                            // Robot Magnet
+                            break;
+                        default:
+                            console.warning("Bug in level loading robot logic");
+                            break;
+                    }
+                }
             }
         }
 

@@ -4,6 +4,7 @@ export class Door {
     constructor(x, y) {
         this.x = x;
         this.y = y;
+        this.solid = true;
         this.isOpen = false;
 
         this.currentSprite = "#D2D2D2";
