@@ -8,14 +8,14 @@ export class Powerblock {
         this.doors = [];
         this.isPowered = false;
 
-        this.currentSprite = "#222200";
+        this.currentSprite = "#444400";
     }
 
     set powered(p) {
         this.isPowered = p;
 
         // NOTE(istarnion): TEMP!
-        this.currentSprite = p ? "#FFFF00" : "#222200";
+        this.currentSprite = p ? "#AAAA00" : "#444400";
 
         for(const wire of this.wires) {
             wire.powered = p;

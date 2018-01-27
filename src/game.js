@@ -36,8 +36,8 @@ export class Game {
             }
         }
 
-        for(const object of this.objects) {
-            object.render();
+        for(const obj of this.objects) {
+            obj.render();
         }
 
         // TODO(istarnion): Render objects ( ? Or are robots objects? )
@@ -66,13 +66,58 @@ export class Game {
             }
         }
 
+        // NOTE(istarnion): I'm sorry for this code. :(
+        // I wont be able to read it myself tomorrow, but it seems to
+        // work for now
         for(let y = 0; y<wires.height; ++y) {
             for(let x=0; x<wires.width; ++x) {
                 const tileID = colorToTileID(wires.getPixel(x, y));
                 if(tileID === tileIDs.powerblock) {
-                    console.log(`Creating powerblock at ${x} ${y}`);
                     const powerblock = new Powerblock(x, y);
                     this.objects.push(powerblock);
+
+                    const openList = [];
+                    const closedList = [];
+                    const getNeighbour = (_x, _y) => {
+                        if(closedList.indexOf(_x + _y * wires.width) >= 0) return false;
+
+                        const color = wires.getPixel(_x, _y);
+                        if(!color) return;
+
+                        const id = colorToTileID(color);
+                        if(!id) return;
+
+                        if(id === tileIDs.wire) {
+                            const wire = new Wire(_x, _y);
+                            powerblock.wires.push(wire);
+                            this.objects.push(wire);
+                            openList.push({ x: _x, y: _y });
+                        }
+                        else if(id === tileIDs.door) {
+                            const door = new Door(_x, _y);
+                            powerblock.doors.push(door);
+                            this.objects.push(door);
+                            openList.push({ x: _x, y: _y });
+                        }
+                    };
+
+                    const visitNeighbours = (coord) => {
+                        getNeighbour(coord.x, coord.y - 1);
+                        getNeighbour(coord.x - 1, coord.y);
+                        getNeighbour(coord.x + 1, coord.y);
+                        getNeighbour(coord.x, coord.y + 1);
+                    };
+
+                    let currCoord = { x: x, y: y };
+                    openList.push(currCoord);
+
+                    do {
+                        currCoord = openList.pop();
+                        closedList.push(currCoord.x + currCoord.y * wires.width);
+
+                        visitNeighbours(currCoord);
+                    }
+                    while(openList.length > 0);
                 }
             }
         }

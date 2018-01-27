@@ -1,3 +1,5 @@
+import { renderTile } from "./tiles.js";
+
 export class Door {
     constructor(x, y) {
         this.x = x;

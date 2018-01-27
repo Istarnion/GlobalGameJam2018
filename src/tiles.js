@@ -4,7 +4,9 @@ import { gfx } from "./graphics.js";
 export const tileIDs = {
     floor: 0,
     wall: 1,
-    powerblock: 2
+    powerblock: 2,
+    wire: 3,
+    door: 4
 };
 
 export const tiles = [
@@ -60,6 +62,8 @@ export const colorToTileID = (color) => {
         case 0x0026FF: return tileIDs.wall;
 
         case 0x808080: return tileIDs.powerblock;
+        case 0xFF7F7F: return tileIDs.wire;
+        case 0x267F00: return tileIDs.door;
 
         defualt:
             console.warning(`We don't support color 0x${hex.toString(16).toUpperCase()} (yet?)`);

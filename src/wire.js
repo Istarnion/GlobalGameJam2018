@@ -1,4 +1,4 @@
-import { renderTile } from "./tiles.js";
+import { gfx } from "./graphics.js";
 
 export class Wire {
     constructor(x, y) {
@@ -22,7 +22,7 @@ export class Wire {
 
     render() {
         gfx.fillStyle = this.currentSprite;
-        gfx.fillRect(48+x*32+2, 12+y*32+2, 28, 28);
+        gfx.fillRect(48+this.x*32+2, 12+this.y*32+2, 28, 28);
 
         // NOTE(istarnion): This is what we will use when we get wire sprites:
         // renderTile(this.currentSprite, this.x, this.y);
