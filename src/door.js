@@ -1,27 +1,36 @@
-import { renderTile } from "./tiles.js";
+import { animations } from "./assets.js";
+import { Animation } from "./animation.js";
 
 export class Door {
-    constructor(x, y) {
+    constructor(x, y, isHorizontal) {
         this.x = x;
         this.y = y;
         this.solid = true;
         this.isOpen = false;
 
-        this.currentSprite = "#D2D2D2";
+        const animName = isHorizontal ? "horizontalDoor" : "verticalDoor";
+        this.openAnim = new Animation(animations[`${animName}Open`]);
+        this.closeAnim = new Animation(animations[`${animName}Close`]);
+        this.sprite = this.closeAnim;
     }
 
     set open(o) {
         this.isOpen = o;
         this.solid = !o;
-        this.currentSprite = o ? "#2D2D2D" : "#D2D2D2";
+        this.sprite = o ? this.openAnim : this.closeAnim;
+        this.sprite.reset();
     }
 
     get open() {
-        return this.isPowered;
+        return this.isOpen;
+    }
+
+    update(delta) {
+        this.sprite.update(delta);
     }
 
     render() {
-        renderTile(this.currentSprite, this.x, this.y);
+        this.sprite.draw(this.x, this.y);
     }
 }
 

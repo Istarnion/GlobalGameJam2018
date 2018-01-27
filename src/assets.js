@@ -21,7 +21,9 @@ export const images = {
     wire_powered_h: "res/sprites/WireHorizontalPowered.png",
     wire_powered_v: "res/sprites/WireVerticalPowered.png",
 
-    powerBlock: "res/sprites/PowerBlock.png"
+    powerBlock: "res/sprites/PowerBlock.png",
+    horizontalDoor: "res/sprites/DoorVertical.png",
+    verticalDoor: "res/sprites/DoorHorizontal.png"
 };
 
 export const animations = {
@@ -113,6 +115,47 @@ export const animations = {
         frames: [
             { x: 0, y: 0, w: 32, h: 32 },
             { x: 32, y: 0, w: 32, h: 32 }
+        ]
+    },
+
+    horizontalDoorOpen: {
+        image: "horizontalDoor",
+        timePerFrame: 0.2,
+        looping: "once",
+        frames: [
+            { x: 0, y: 0, w: 32, h: 32 },
+            { x: 32, y: 0, w: 32, h: 32 },
+            { x: 64, y: 0, w: 32, h: 32 }
+        ]
+    },
+    horizontalDoorClose: {
+        image: "horizontalDoor",
+        timePerFrame: 0.2,
+        looping: "once",
+        frames: [
+            { x: 64, y: 0, w: 32, h: 32 },
+            { x: 32, y: 0, w: 32, h: 32 },
+            { x: 0, y: 0, w: 32, h: 32 },
+        ]
+    },
+    verticalDoorOpen: {
+        image: "verticalDoor",
+        timePerFrame: 0.2,
+        looping: "once",
+        frames: [
+            { x: 0, y: 0, w: 32, h: 32 },
+            { x: 32, y: 0, w: 32, h: 32 },
+            { x: 64, y: 0, w: 32, h: 32 }
+        ]
+    },
+    verticalDoorClose: {
+        image: "verticalDoor",
+        timePerFrame: 0.2,
+        looping: "once",
+        frames: [
+            { x: 64, y: 0, w: 32, h: 32 },
+            { x: 32, y: 0, w: 32, h: 32 },
+            { x: 0, y: 0, w: 32, h: 32 },
         ]
     }
 };

@@ -75,6 +75,7 @@ export const colorToTileID = (color) => {
         case 0x7F6A00:
         case 0xFFD800:
         case 0x00FF21:
+        case 0xFF6A00:
         case 0xFFFFFF: return tileIDs.floor;
 
         case 0x0026FF: return tileIDs.wall;

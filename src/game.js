@@ -2,7 +2,7 @@ import { gfx, getBitmap } from "./graphics.js";
 import { input } from "./input.js";
 
 import { tileIDs, colorToTileID, createTile, renderTile } from "./tiles.js";
-import { maps } from "./maps.js"; 
+import { maps } from "./maps.js";
 import { Powerblock } from "./powerblock.js";
 import { Wire } from "./wire.js";
 import { Door } from "./door.js";
@@ -121,6 +121,12 @@ export class Game {
         this.powerBot.update(delta);
         this.magnetBot.update(delta);
         this.mirrorBot.update(delta);
+
+        for(const obj of this.objects) {
+            if(obj.update) {
+                obj.update(delta);
+            }
+        }
 
         // If level complete, fade out. If no more levels, go to victory screen, else load next level
 
@@ -256,7 +262,10 @@ export class Game {
                             openList.push({ x: _x, y: _y });
                         }
                         else if(id === tileIDs.door) {
-                            const door = new Door(_x, _y);
+                            let isHorizontal = false;
+                            const tileAbove = map[_y-1][_x];
+                            if(!!tileAbove && tileAbove.solid) isHorizontal = true;
+                            const door = new Door(_x, _y, isHorizontal);
                             powerblock.doors.push(door);
                             this.objects.push(door);
                             openList.push({ x: _x, y: _y });
