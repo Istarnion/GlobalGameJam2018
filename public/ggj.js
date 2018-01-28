@@ -762,15 +762,15 @@ var _assets = __webpack_require__(1);
 
 var _input = __webpack_require__(5);
 
-var _game = __webpack_require__(7);
+var _game = __webpack_require__(8);
 
-var _menu = __webpack_require__(19);
+var _menu = __webpack_require__(23);
 
-var _credits = __webpack_require__(20);
+var _credits = __webpack_require__(24);
 
-var _maps = __webpack_require__(6);
+var _maps = __webpack_require__(7);
 
-var _musicManager = __webpack_require__(21);
+var _musicManager = __webpack_require__(6);
 
 (0, _graphics.setGameSize)(800, 600);
 
@@ -1142,6 +1142,100 @@ window.addEventListener("keyup", function (e) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.musicManager = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _howlerMin = __webpack_require__(9);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var MusicManager = function () {
+    function MusicManager() {
+        var _this = this;
+
+        _classCallCheck(this, MusicManager);
+
+        this.timeToPlayAmbientsound = 10;
+        // Load sounds
+        this.sounds = {};
+        this.sounds.echo = new _howlerMin.Howl({
+            src: ['res/sounds/SFXEcho.mp3']
+        });
+        this.sounds.blockDrag = new _howlerMin.Howl({
+            src: ['res/sounds/SFXBlockDrag.mp3']
+        });
+        this.sounds.blockFall = new _howlerMin.Howl({
+            src: ['res/sounds/SFXBlockDragFall.mp3']
+        });
+        // Load music
+        this.music = {};
+        this.music.startDrone = new _howlerMin.Howl({
+            src: ['res/sounds/BassDrone_Start.mp3'],
+            onend: function onend() {
+                _this.music.loopDrone.play();
+            }
+        });
+        this.music.loopDrone = new _howlerMin.Howl({
+            src: ['res/sounds/BassDrone_Cont.mp3'],
+            loop: true
+        });
+
+        // Load ambientSounds
+        this.ambientSounds = [];
+        this.ambientSounds.push(new _howlerMin.Howl({ src: ['res/sounds/ambience_01.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_02.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_03.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_04.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_05.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_06.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_07.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_08.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_09.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_10.ogg'] }));
+    }
+
+    _createClass(MusicManager, [{
+        key: 'update',
+        value: function update(deltaTime) {
+            this.timeToPlayAmbientsound -= deltaTime;
+            if (this.timeToPlayAmbientsound <= 0) {
+                this.timeToPlayAmbientsound = 7 + Math.random() * 15 - 7;
+                this.playAmbient(Math.floor(Math.random() * 10));
+            }
+        }
+    }, {
+        key: 'startMusic',
+        value: function startMusic() {}
+    }, {
+        key: 'playSound',
+        value: function playSound(action) {
+            this.sounds[action].play();
+        }
+    }, {
+        key: 'beginLevel',
+        value: function beginLevel() {
+            // fade inn?
+            this.music.startDrone.play();
+        }
+    }, {
+        key: 'endLevel',
+        value: function endLevel() {
+            // fade out...
+        }
+    }, {
+        key: 'playAmbient',
+        value: function playAmbient(index) {
+            this.ambientSounds[index].play();
+        }
+    }]);
+
+    return MusicManager;
+}();
+
+var musicManager = exports.musicManager = new MusicManager();
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 var maps = exports.maps = [{
     tiles: "res/levels/Map01Tiles.png",
     wire: "res/levels/Map01Wire.png",
@@ -1157,7 +1251,7 @@ var maps = exports.maps = [{
 }];
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1174,33 +1268,35 @@ var _app = __webpack_require__(4);
 
 var _graphics = __webpack_require__(0);
 
+var _musicManager = __webpack_require__(6);
+
 var _input = __webpack_require__(5);
 
-var _tiles = __webpack_require__(8);
+var _tiles = __webpack_require__(12);
 
-var _maps = __webpack_require__(6);
+var _maps = __webpack_require__(7);
 
-var _powerblock = __webpack_require__(9);
+var _powerblock = __webpack_require__(13);
 
-var _wire = __webpack_require__(10);
+var _wire = __webpack_require__(14);
 
-var _door = __webpack_require__(11);
+var _door = __webpack_require__(15);
 
-var _block = __webpack_require__(12);
+var _block = __webpack_require__(16);
 
-var _goal = __webpack_require__(13);
+var _goal = __webpack_require__(17);
 
-var _emitter = __webpack_require__(14);
+var _emitter = __webpack_require__(18);
 
-var _laserbeam = __webpack_require__(15);
+var _laserbeam = __webpack_require__(19);
 
-var _mirror = __webpack_require__(16);
+var _mirror = __webpack_require__(20);
 
-var _robot = __webpack_require__(17);
+var _robot = __webpack_require__(21);
 
 var _utils = __webpack_require__(2);
 
-var _cursor = __webpack_require__(18);
+var _cursor = __webpack_require__(22);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1769,10 +1865,12 @@ var Game = exports.Game = function () {
                                 if (this.canRobotWalkTo(targetX, targetY)) {
                                     obj.x = targetX;
                                     obj.y = targetY;
+                                    _musicManager.musicManager.playSound("blockDrag");
                                 } else if (obj instanceof _block.Block && this.getTileAt(targetX, targetY).id === _tiles.tileIDs.chasm) {
                                     this.level[targetY][targetX] = (0, _tiles.createTile)(_tiles.tileIDs.fallenBlock);
                                     this.level[targetY][targetX].sprite = obj.sprite;
                                     (0, _utils.removeFromArray)(this.objects, obj);
+                                    _musicManager.musicManager.playSound("blockFall");
                                 }
 
                                 return;
@@ -1938,1221 +2036,7 @@ var Game = exports.Game = function () {
 }();
 
 /***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.renderTile = exports.createTile = exports.colorToTileID = exports.tiles = exports.tileIDs = undefined;
-
-var _graphics = __webpack_require__(0);
-
-// NOTE(istarnion): These values must match the indices in the tiles array.
-// This is bad, but I'm too sleepy to figure out a cleaner solution
-var tileIDs = exports.tileIDs = {
-    floor: 0,
-    wall: 1,
-    chasm: 2,
-    fallenBlock: 3,
-    powerblock: 10,
-    wire: 11,
-    door: 12,
-    emitter: 13
-};
-
-var tiles = exports.tiles = [{
-    id: tileIDs.floor,
-    solid: false,
-    sprite: "floor1",
-
-    render: function render(x, y) {
-        renderTile(_graphics.sprites[this.sprite], x, y);
-    }
-}, {
-    id: tileIDs.wall,
-    solid: true,
-    sprite: "wall1",
-
-    render: function render(x, y) {
-        renderTile(_graphics.sprites[this.sprite], x, y);
-    }
-}, {
-    id: tileIDs.chasm,
-    solid: true,
-    sprite: "chasm",
-
-    render: function render(x, y) {
-        renderTile(_graphics.sprites[this.sprite], x, y);
-    }
-}, {
-    id: tileIDs.falledBlock,
-    solid: false,
-    numFramesRemainingOnMidFrame: 10,
-
-    render: function render(x, y) {
-        // this.sprite is set outside
-        if (this.numFramesRemainingOnMidFrame > 0) {
-            --this.numFramesRemainingOnMidFrame;
-            this.sprite.currentFrame = 1;
-        } else {
-            this.sprite.currentFrame = 2;
-        }
-
-        this.sprite.draw(x, y);
-    }
-}];
-
-var colorToTileID = exports.colorToTileID = function colorToTileID(color) {
-    /*
-        FFFFFF = Floor
-        0026FF = Wall
-        000000 = Chasm
-        404040 = Nothingness
-        7F0000 = Block
-        FFD800 = EmitterUp
-        FF6A00 = MemoryUp
-        00FF21 = Goal
-        FF0000 = RobotRelay
-        00FFFF = RobotPower
-        B200FF = RobotMagnet
-        57007F = MirrorSW
-        7F6A00 = MirrorSE
-        267F00 = Door
-        808080 = Power
-        FF7F7F = Cable
-    */
-    var hex = color.r << 16 | color.g << 8 | color.b << 0;
-
-    switch (hex) {
-        // Robots have floors under them! Blocks too!
-        case 0xFF0000:
-        case 0x00FFFF:
-        case 0xB200FF:
-        case 0x7F0000:
-        case 0x57007F:
-        case 0x7F6A00:
-        case 0xFFD800:
-        case 0x00FF21:
-        case 0xFF6A00:
-        case 0xFFFFFF:
-            return tileIDs.floor;
-
-        case 0x0026FF:
-            return tileIDs.wall;
-
-        case 0x808080:
-            return tileIDs.powerblock;
-        case 0xFF7F7F:
-            return tileIDs.wire;
-        case 0x267F00:
-            return tileIDs.door;
-
-        case 0x000000:
-            return tileIDs.chasm;
-
-            defualt: console.warn("We don't support color 0x" + hex.toString(16).toUpperCase() + " (yet?)");
-            break;
-    }
-};
-
-var createTile = exports.createTile = function createTile(tile) {
-    var result = {};
-    var tileData = tiles[tile];
-
-    for (var prop in tileData) {
-        if (tileData.hasOwnProperty(prop)) {
-            result[prop] = tileData[prop];
-        }
-    }
-
-    return result;
-};
-
-var renderTile = exports.renderTile = function renderTile(colorOrImage, x, y) {
-    (0, _graphics.drawSprite)(colorOrImage, x, y);
-
-    // For debug:
-    //gfx.strokeStyle = "red";
-    //gfx.strokeRect(48+x*32, 12+y*32, 32, 32);
-};
-
-/***/ }),
 /* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.Powerblock = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _assets = __webpack_require__(1);
-
-var _animation = __webpack_require__(3);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Powerblock = exports.Powerblock = function () {
-    function Powerblock(x, y) {
-        _classCallCheck(this, Powerblock);
-
-        this.x = x;
-        this.y = y;
-        this.solid = true;
-        this.wires = [];
-        this.doors = [];
-        this.isPowered = false;
-
-        this.sprite = new _animation.Animation(_assets.animations.powerBlock);
-    }
-
-    _createClass(Powerblock, [{
-        key: "setPowerState",
-        value: function setPowerState(p) {
-            if (p === this.isPowered) return;
-
-            this.isPowered = p;
-
-            this.sprite.currentFrame = p ? 1 : 0;
-
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
-
-            try {
-                for (var _iterator = this.wires[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                    var wire = _step.value;
-
-                    wire.powered = p;
-                }
-            } catch (err) {
-                _didIteratorError = true;
-                _iteratorError = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion && _iterator.return) {
-                        _iterator.return();
-                    }
-                } finally {
-                    if (_didIteratorError) {
-                        throw _iteratorError;
-                    }
-                }
-            }
-
-            var _iteratorNormalCompletion2 = true;
-            var _didIteratorError2 = false;
-            var _iteratorError2 = undefined;
-
-            try {
-                for (var _iterator2 = this.doors[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                    var door = _step2.value;
-
-                    door.open = p;
-                }
-            } catch (err) {
-                _didIteratorError2 = true;
-                _iteratorError2 = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                        _iterator2.return();
-                    }
-                } finally {
-                    if (_didIteratorError2) {
-                        throw _iteratorError2;
-                    }
-                }
-            }
-        }
-    }, {
-        key: "render",
-        value: function render() {
-            this.sprite.draw(this.x, this.y);
-        }
-    }, {
-        key: "initWires",
-        value: function initWires() {
-            var o = 0;
-            var _iteratorNormalCompletion3 = true;
-            var _didIteratorError3 = false;
-            var _iteratorError3 = undefined;
-
-            try {
-                for (var _iterator3 = this.wires[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                    var wire = _step3.value;
-
-                    o = 0;
-                    var _iteratorNormalCompletion4 = true;
-                    var _didIteratorError4 = false;
-                    var _iteratorError4 = undefined;
-
-                    try {
-                        for (var _iterator4 = this.wires[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-                            var otherWire = _step4.value;
-
-                            if (wire !== otherWire) {
-                                if (wire.y - otherWire.y === 1 && wire.x === otherWire.x) {
-                                    // above
-                                    o |= 1;
-                                } else if (wire.x - otherWire.x === 1 && wire.y === otherWire.y) {
-                                    // Left
-                                    o |= 2;
-                                }
-                                if (wire.y - otherWire.y === -1 && wire.x === otherWire.x) {
-                                    // Below
-                                    o |= 4;
-                                } else if (wire.x - otherWire.x === -1 && wire.y === otherWire.y) {
-                                    // Right
-                                    o |= 8;
-                                }
-                            }
-                        }
-                    } catch (err) {
-                        _didIteratorError4 = true;
-                        _iteratorError4 = err;
-                    } finally {
-                        try {
-                            if (!_iteratorNormalCompletion4 && _iterator4.return) {
-                                _iterator4.return();
-                            }
-                        } finally {
-                            if (_didIteratorError4) {
-                                throw _iteratorError4;
-                            }
-                        }
-                    }
-
-                    var _iteratorNormalCompletion5 = true;
-                    var _didIteratorError5 = false;
-                    var _iteratorError5 = undefined;
-
-                    try {
-                        for (var _iterator5 = this.doors[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-                            var door = _step5.value;
-
-                            if (wire.y - door.y === 1 && wire.x === door.x) {
-                                // above
-                                o |= 1;
-                            } else if (wire.x - door.x === 1 && wire.y === door.y) {
-                                // Left
-                                o |= 2;
-                            }
-                            if (wire.y - door.y === -1 && wire.x === door.x) {
-                                // Below
-                                o |= 4;
-                            } else if (wire.x - door.x === -1 && wire.y === door.y) {
-                                // Right
-                                o |= 8;
-                            }
-                        }
-                    } catch (err) {
-                        _didIteratorError5 = true;
-                        _iteratorError5 = err;
-                    } finally {
-                        try {
-                            if (!_iteratorNormalCompletion5 && _iterator5.return) {
-                                _iterator5.return();
-                            }
-                        } finally {
-                            if (_didIteratorError5) {
-                                throw _iteratorError5;
-                            }
-                        }
-                    }
-
-                    if (wire.y - this.y === 1 && wire.x === this.x) {
-                        // above
-                        o |= 1;
-                    } else if (wire.x - this.x === 1 && wire.y === this.y) {
-                        // Left
-                        o |= 2;
-                    }
-                    if (wire.y - this.y === -1 && wire.x === this.x) {
-                        // Below
-                        o |= 4;
-                    } else if (wire.x - this.x === -1 && wire.y === this.y) {
-                        // Right
-                        o |= 8;
-                    }
-
-                    if (o === 5) wire.orientation = "v";else if (o === 10) wire.orientation = "h";else if (o === 12) wire.orientation = "se";else if (o === 6) wire.orientation = "sw";else if (o === 9) wire.orientation = "ne";else if (o === 3) wire.orientation = "nw";
-                }
-            } catch (err) {
-                _didIteratorError3 = true;
-                _iteratorError3 = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                        _iterator3.return();
-                    }
-                } finally {
-                    if (_didIteratorError3) {
-                        throw _iteratorError3;
-                    }
-                }
-            }
-        }
-    }, {
-        key: "powered",
-        get: function get() {
-            return this.isPowered;
-        }
-    }]);
-
-    return Powerblock;
-}();
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.Wire = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _graphics = __webpack_require__(0);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Wire = exports.Wire = function () {
-    function Wire(x, y) {
-        _classCallCheck(this, Wire);
-
-        this.x = x;
-        this.y = y;
-        this.solid = false;
-        this.isPowered = false;
-
-        this.currentSprite = "#440000";
-        this.sprite = null;
-        this.o = "";
-    }
-
-    _createClass(Wire, [{
-        key: "earlyRender",
-        value: function earlyRender() {
-            if (!!this.sprite) {
-                (0, _graphics.drawSprite)(this.sprite, this.x, this.y);
-            }
-        }
-    }, {
-        key: "orientation",
-        set: function set(o) {
-            this.o = o;
-            this.sprite = _graphics.sprites["wire_" + o];
-        }
-    }, {
-        key: "powered",
-        set: function set(p) {
-            this.isPowered = p;
-            if (p) {
-                this.sprite = _graphics.sprites["wire_powered_" + this.o];
-            } else {
-                this.sprite = _graphics.sprites["wire_" + this.o];
-            }
-        },
-        get: function get() {
-            return this.isPowered;
-        }
-    }]);
-
-    return Wire;
-}();
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.Door = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _assets = __webpack_require__(1);
-
-var _animation = __webpack_require__(3);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Door = exports.Door = function () {
-    function Door(x, y, isHorizontal) {
-        _classCallCheck(this, Door);
-
-        this.x = x;
-        this.y = y;
-        this.solid = true;
-        this.isOpen = false;
-
-        var animName = isHorizontal ? "horizontalDoor" : "verticalDoor";
-        this.openAnim = new _animation.Animation(_assets.animations[animName + "Open"]);
-        this.closeAnim = new _animation.Animation(_assets.animations[animName + "Close"]);
-        this.sprite = this.closeAnim;
-    }
-
-    _createClass(Door, [{
-        key: "update",
-        value: function update(delta) {
-            this.sprite.update(delta);
-        }
-    }, {
-        key: "render",
-        value: function render() {
-            this.sprite.draw(this.x, this.y);
-        }
-    }, {
-        key: "open",
-        set: function set(o) {
-            this.isOpen = o;
-            this.solid = !o;
-            this.sprite = o ? this.openAnim : this.closeAnim;
-            this.sprite.reset();
-        },
-        get: function get() {
-            return this.isOpen;
-        }
-    }]);
-
-    return Door;
-}();
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.Block = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _graphics = __webpack_require__(0);
-
-var _assets = __webpack_require__(1);
-
-var _animation = __webpack_require__(3);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Block = exports.Block = function () {
-    function Block(x, y) {
-        _classCallCheck(this, Block);
-
-        this.x = x;
-        this.y = y;
-        this.solid = true;
-
-        this.sprite = new _animation.Animation(_assets.animations.block);
-    }
-
-    _createClass(Block, [{
-        key: "render",
-        value: function render() {
-            this.sprite.draw(this.x, this.y);
-        }
-    }]);
-
-    return Block;
-}();
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.Goal = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _assets = __webpack_require__(1);
-
-var _animation = __webpack_require__(3);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Goal = exports.Goal = function () {
-    function Goal(x, y) {
-        _classCallCheck(this, Goal);
-
-        this.x = x;
-        this.y = y;
-        this.solid = true;
-
-        this.sprite = new _animation.Animation(_assets.animations.goal);
-    }
-
-    _createClass(Goal, [{
-        key: "update",
-        value: function update(delta) {
-            this.sprite.update(delta);
-        }
-    }, {
-        key: "render",
-        value: function render() {
-            this.sprite.draw(this.x, this.y);
-        }
-    }]);
-
-    return Goal;
-}();
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.Emitter = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _assets = __webpack_require__(1);
-
-var _animation = __webpack_require__(3);
-
-var _utils = __webpack_require__(2);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Emitter = exports.Emitter = function () {
-    function Emitter(x, y) {
-        _classCallCheck(this, Emitter);
-
-        this.x = x;
-        this.y = y;
-        this.solid = true;
-
-        this.sprite = new _animation.Animation(_assets.animations.emitter);
-
-        this.laserBeams = [];
-
-        this.direction = _utils.Directions.up;
-    }
-
-    _createClass(Emitter, [{
-        key: "update",
-        value: function update(delta) {
-            this.sprite.update(delta);
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
-
-            try {
-                for (var _iterator = this.laserBeams[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                    var beam = _step.value;
-
-                    beam.update(delta);
-                }
-            } catch (err) {
-                _didIteratorError = true;
-                _iteratorError = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion && _iterator.return) {
-                        _iterator.return();
-                    }
-                } finally {
-                    if (_didIteratorError) {
-                        throw _iteratorError;
-                    }
-                }
-            }
-        }
-    }, {
-        key: "render",
-        value: function render() {
-            this.sprite.draw(this.x, this.y, 0, 0, this.direction);
-
-            var _iteratorNormalCompletion2 = true;
-            var _didIteratorError2 = false;
-            var _iteratorError2 = undefined;
-
-            try {
-                for (var _iterator2 = this.laserBeams[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                    var beam = _step2.value;
-
-                    beam.render();
-                }
-            } catch (err) {
-                _didIteratorError2 = true;
-                _iteratorError2 = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                        _iterator2.return();
-                    }
-                } finally {
-                    if (_didIteratorError2) {
-                        throw _iteratorError2;
-                    }
-                }
-            }
-        }
-    }]);
-
-    return Emitter;
-}();
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.LaserBeam = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _assets = __webpack_require__(1);
-
-var _animation = __webpack_require__(3);
-
-var _utils = __webpack_require__(2);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var LaserBeam = exports.LaserBeam = function () {
-    function LaserBeam(x, y, dir, ext) {
-        _classCallCheck(this, LaserBeam);
-
-        this.x = x;
-        this.y = y;
-
-        if (ext.length > 0) {
-            this.direction = _utils.Directions.up;
-        } else {
-            this.direction = dir;
-        }
-
-        this.sprite = new _animation.Animation(_assets.animations["laser" + ext]);
-    }
-
-    _createClass(LaserBeam, [{
-        key: "update",
-        value: function update(delta) {
-            this.sprite.update(delta);
-        }
-    }, {
-        key: "render",
-        value: function render() {
-            this.sprite.draw(this.x, this.y, 0, 0, this.direction);
-        }
-    }]);
-
-    return LaserBeam;
-}();
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.Mirror = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _graphics = __webpack_require__(0);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Mirror = exports.Mirror = function () {
-    function Mirror(x, y, orientation) {
-        _classCallCheck(this, Mirror);
-
-        this.x = x;
-        this.y = y;
-        this.solid = true;
-        this.isMirror = true;
-        this.orientation = orientation;
-
-        this.sprite = _graphics.sprites["mirror_" + orientation];
-    }
-
-    _createClass(Mirror, [{
-        key: "render",
-        value: function render() {
-            (0, _graphics.drawSprite)(this.sprite, this.x, this.y);
-        }
-    }]);
-
-    return Mirror;
-}();
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.Robot = exports.RobotTypes = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _graphics = __webpack_require__(0);
-
-var _assets = __webpack_require__(1);
-
-var _animation = __webpack_require__(3);
-
-var _utils = __webpack_require__(2);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var RobotTypes = exports.RobotTypes = {
-    power: 0,
-    magnet: 1, mirror: 2
-};
-
-var Robot = exports.Robot = function () {
-    function Robot(type) {
-        _classCallCheck(this, Robot);
-
-        this.type = type;
-
-        switch (type) {
-            case RobotTypes.power:
-                this.animDown = new _animation.Animation(_assets.animations.powerBotDown);
-                this.animIdle = new _animation.Animation(_assets.animations.powerBotIdle);
-                this.animWalk = new _animation.Animation(_assets.animations.powerBotWalk);
-                break;
-            case RobotTypes.magnet:
-                this.animDown = new _animation.Animation(_assets.animations.magnetBotDown);
-                this.animIdle = new _animation.Animation(_assets.animations.magnetBotIdle);
-                this.animWalk = new _animation.Animation(_assets.animations.magnetBotWalk);
-                break;
-            case RobotTypes.mirror:
-                this.animDown = new _animation.Animation(_assets.animations.mirrorBotDown);
-                this.animIdle = new _animation.Animation(_assets.animations.mirrorBotIdle);
-                this.animWalk = new _animation.Animation(_assets.animations.mirrorBotWalk);
-                break;
-            default:
-                console.warn("Buggy creation of robots!");
-        }
-
-        this.currAnim = this.animDown;
-
-        this.x = 0;
-        this.y = 0;
-
-        this.dir = _utils.Directions.up;
-        this.moving = false;
-        this.moveTime = 0;
-
-        this.offsetX = 0;
-        this.offsetY = 0;
-        this.deltaX = 0;
-        this.deltaY = 0;
-
-        this.speed = 160;
-    }
-
-    _createClass(Robot, [{
-        key: "setPosition",
-        value: function setPosition(x, y) {
-            this.x = x;
-            this.y = y;
-        }
-    }, {
-        key: "move",
-        value: function move(direction, x, y) {
-            this.moving = true;
-            if (direction !== this.dir) {
-                this.moveTime = 0.2;
-                this.dir = direction;
-            } else {
-                this.currAnim = this.animWalk;
-                if (this.x < x) {
-                    this.offsetX = -32;
-                    this.deltaX = this.speed;
-                } else if (this.x > x) {
-                    this.offsetX = 32;
-                    this.deltaX = -this.speed;
-                } else if (this.y < y) {
-                    this.offsetY = -32;
-                    this.deltaY = this.speed;
-                } else if (this.y > y) {
-                    this.offsetY = 32;
-                    this.deltaY = -this.speed;
-                }
-
-                this.x = x;
-                this.y = y;
-            }
-        }
-    }, {
-        key: "render",
-        value: function render() {
-            this.currAnim.draw(this.x, this.y, this.offsetX, this.offsetY, this.dir);
-        }
-    }, {
-        key: "update",
-        value: function update(deltaTime) {
-            this.currAnim.update(deltaTime);
-
-            if (this.moving) {
-                this.moveTime = Math.max(0, this.moveTime - deltaTime);
-
-                this.offsetX += this.deltaX * deltaTime;
-                this.offsetY += this.deltaY * deltaTime;
-
-                if (this.dir === _utils.Directions.up) {
-                    this.offsetX = 0;
-                    if (this.offsetY < 0) {
-                        this.offsetY = 0;
-                    }
-                } else if (this.dir === _utils.Directions.right) {
-                    this.offsetY = 0;
-                    if (this.offsetX > 0) {
-                        this.offsetX = 0;
-                    }
-                } else if (this.dir === _utils.Directions.down) {
-                    this.offsetX = 0;
-                    if (this.offsetY > 0) {
-                        this.offsetY = 0;
-                    }
-                } else if (this.dir === _utils.Directions.left) {
-                    this.offsetY = 0;
-                    if (this.offsetX < 0) {
-                        this.offsetX = 0;
-                    }
-                }
-
-                if (this.moveTime === 0 && this.offsetX === 0 && this.offsetY === 0) {
-                    this.currAnim = this.animIdle;
-                    this.deltaX = this.deltaY = 0;
-                    this.moving = false;
-                }
-            }
-        }
-    }, {
-        key: "active",
-        set: function set(a) {
-            if (a) this.currAnim = this.animIdle;else this.currAnim = this.animDown;
-            this.currAnim.reset();
-        }
-    }]);
-
-    return Robot;
-}();
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.Cursor = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _graphics = __webpack_require__(0);
-
-var _utils = __webpack_require__(2);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-;
-
-var Cursor = exports.Cursor = function () {
-    function Cursor(x, y) {
-        _classCallCheck(this, Cursor);
-
-        this.targetX = x;
-        this.targetY = y;
-        this.offsetX = 0;
-        this.offsetY = 0;
-
-        this.speed = 2048;
-        this.bounceSpeed = 6;
-        this.theta = 0;
-
-        this.sprite = _graphics.sprites["cursor"];
-    }
-
-    _createClass(Cursor, [{
-        key: "setTarget",
-        value: function setTarget(x, y) {
-            if (x !== this.targetX || y !== this.targetY) {
-                this.offsetX = (this.targetX - x) * 32;
-                this.offsetY = (this.targetY - y) * 32;
-                this.targetX = x;
-                this.targetY = y;
-            }
-        }
-    }, {
-        key: "update",
-        value: function update(delta) {
-            this.theta += this.bounceSpeed * delta;
-            if (this.theta > 2 * Math.PI) {
-                this.theta -= 2 * Math.PI;
-            }
-
-            var dx = -this.offsetX;
-            var dy = -this.offsetY;
-            var len = Math.sqrt(dx * dx + dy * dy);
-            if (Math.abs(len) > this.speed * delta) {
-                this.offsetX += dx / len * this.speed * delta;
-                this.offsetY += dy / len * this.speed * delta;
-            } else {
-                this.offsetX = this.offsetY = 0;
-            }
-        }
-    }, {
-        key: "render",
-        value: function render() {
-            var radius = 16 + Math.sin(this.theta) * 4;
-
-            (0, _graphics.drawSprite)(this.sprite, this.targetX, this.targetY, this.offsetX - radius, this.offsetY - radius, _utils.Directions.up);
-            (0, _graphics.drawSprite)(this.sprite, this.targetX, this.targetY, this.offsetX + radius, this.offsetY - radius, _utils.Directions.right);
-            (0, _graphics.drawSprite)(this.sprite, this.targetX, this.targetY, this.offsetX + radius, this.offsetY + radius, _utils.Directions.down);
-            (0, _graphics.drawSprite)(this.sprite, this.targetX, this.targetY, this.offsetX - radius, this.offsetY + radius, _utils.Directions.left);
-        }
-    }]);
-
-    return Cursor;
-}();
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.MainMenu = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _graphics = __webpack_require__(0);
-
-var _input = __webpack_require__(5);
-
-var _app = __webpack_require__(4);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var MainMenu = exports.MainMenu = function () {
-    function MainMenu() {
-        _classCallCheck(this, MainMenu);
-
-        this.playSelected = true;
-    }
-
-    _createClass(MainMenu, [{
-        key: "updateAndRender",
-        value: function updateAndRender(delta) {
-            if (_input.input.isKeyJustPressed("up") || _input.input.isKeyJustPressed("down")) {
-                this.playSelected = !this.playSelected;
-            } else if (_input.input.isKeyJustPressed("e")) {
-                if (this.playSelected) {
-                    (0, _app.startGame)();
-                } else {
-                    (0, _app.startCredits)();
-                }
-            }
-
-            _graphics.gfx.drawImage(_graphics.sprites["menuBG"], 0, 0);
-
-            _graphics.gfx.drawImage(_graphics.sprites["playButton"], this.playSelected ? 256 : 0, 0, 256, 128, 136, 133, 256, 128);
-
-            _graphics.gfx.drawImage(_graphics.sprites["creditsButton"], this.playSelected ? 0 : 256, 0, 256, 128, 136, 339, 256, 128);
-        }
-    }]);
-
-    return MainMenu;
-}();
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.Credits = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _graphics = __webpack_require__(0);
-
-var _input = __webpack_require__(5);
-
-var _app = __webpack_require__(4);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Credits = exports.Credits = function () {
-    function Credits() {
-        _classCallCheck(this, Credits);
-    }
-
-    _createClass(Credits, [{
-        key: "updateAndRender",
-        value: function updateAndRender(delta) {
-            if (_input.input.isKeyJustPressed("e")) {
-                (0, _app.startMenu)();
-            }
-
-            _graphics.gfx.drawImage(_graphics.sprites["creditsBG"], 0, 0);
-
-            _graphics.gfx.drawImage(_graphics.sprites["backButton"], 256, 0, 256, 128, 405, 394, 256, 128);
-        }
-    }]);
-
-    return Credits;
-}();
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.musicManager = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _howlerMin = __webpack_require__(22);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var MusicManager = function () {
-    function MusicManager() {
-        var _this = this;
-
-        _classCallCheck(this, MusicManager);
-
-        this.timeToPlayAmbientsound = 10;
-        // Load sounds
-        this.sounds = {};
-        this.sounds.echo = new _howlerMin.Howl({
-            src: ['res/sounds/SFXEcho.mp3']
-        });
-        this.sounds.blockDrag = new _howlerMin.Howl({
-            src: ['res/sounds/SFXBlockDrag.mp3']
-        });
-        this.sounds.blockFall = new _howlerMin.Howl({
-            src: ['res/sounds/SFXBlockDragFall.mp3']
-        });
-        // Load music
-        this.music = {};
-        this.music.startDrone = new _howlerMin.Howl({
-            src: ['res/sounds/BassDrone_Start.mp3'],
-            onend: function onend() {
-                _this.music.loopDrone.play();
-            }
-        });
-        this.music.loopDrone = new _howlerMin.Howl({
-            src: ['res/sounds/BassDrone_Cont.mp3'],
-            loop: true
-        });
-
-        // Load ambientSounds
-        this.ambientSounds = [];
-        this.ambientSounds.push(new _howlerMin.Howl({ src: ['res/sounds/ambience_01.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_02.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_03.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_04.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_05.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_06.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_07.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_08.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_09.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_10.ogg'] }));
-    }
-
-    _createClass(MusicManager, [{
-        key: 'update',
-        value: function update(deltaTime) {
-            this.timeToPlayAmbientsound -= deltaTime;
-            if (this.timeToPlayAmbientsound <= 0) {
-                this.timeToPlayAmbientsound = 7 + Math.random() * 15 - 7;
-                this.playAmbient(Math.floor(Math.random() * 10));
-            }
-        }
-    }, {
-        key: 'startMusic',
-        value: function startMusic() {}
-    }, {
-        key: 'playSound',
-        value: function playSound(action) {
-            this.sounds[action].play();
-        }
-    }, {
-        key: 'beginLevel',
-        value: function beginLevel() {
-            // fade inn?
-            this.music.startDrone.play();
-        }
-    }, {
-        key: 'endLevel',
-        value: function endLevel() {
-            // fade out...
-        }
-    }, {
-        key: 'playAmbient',
-        value: function playAmbient(index) {
-            this.ambientSounds[index].play();
-        }
-    }]);
-
-    return MusicManager;
-}();
-
-var musicManager = exports.musicManager = new MusicManager();
-
-/***/ }),
-/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3536,7 +2420,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         t = o ? parseInt(o[1], 10) : null;if (e && t && t < 9) {
       var r = /safari/.test(n._navigator && n._navigator.userAgent.toLowerCase());(n._navigator && n._navigator.standalone && !r || n._navigator && !n._navigator.standalone && !r) && (n.usingWebAudio = !1);
     }n.usingWebAudio && (n.masterGain = void 0 === n.ctx.createGain ? n.ctx.createGainNode() : n.ctx.createGain(), n.masterGain.gain.setValueAtTime(n._muted ? 0 : 1, n.ctx.currentTime), n.masterGain.connect(n.ctx.destination)), n._setup();
-  };"function" == "function" && __webpack_require__(24) && !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function () {
+  };"function" == "function" && __webpack_require__(11) && !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function () {
     return { Howler: n, Howl: o };
   }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)), "undefined" != typeof exports && (exports.Howler = n, exports.Howl = o), "undefined" != typeof window ? (window.HowlerGlobal = e, window.Howler = n, window.Howl = o, window.Sound = t) : "undefined" != typeof global && (global.HowlerGlobal = e, global.Howler = n, global.Howl = o, global.Sound = t);
@@ -3612,10 +2496,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     e = e || "spatial", "spatial" === e ? (_n._panner = Howler.ctx.createPanner(), _n._panner.coneInnerAngle = _n._pannerAttr.coneInnerAngle, _n._panner.coneOuterAngle = _n._pannerAttr.coneOuterAngle, _n._panner.coneOuterGain = _n._pannerAttr.coneOuterGain, _n._panner.distanceModel = _n._pannerAttr.distanceModel, _n._panner.maxDistance = _n._pannerAttr.maxDistance, _n._panner.refDistance = _n._pannerAttr.refDistance, _n._panner.rolloffFactor = _n._pannerAttr.rolloffFactor, _n._panner.panningModel = _n._pannerAttr.panningModel, _n._panner.setPosition(_n._pos[0], _n._pos[1], _n._pos[2]), _n._panner.setOrientation(_n._orientation[0], _n._orientation[1], _n._orientation[2])) : (_n._panner = Howler.ctx.createStereoPanner(), _n._panner.pan.setValueAtTime(_n._stereo, Howler.ctx.currentTime)), _n._panner.connect(_n._node), _n._paused || _n._parent.pause(_n._id, !0).play(_n._id);
   };
 }();
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ }),
-/* 23 */
+/* 10 */
 /***/ (function(module, exports) {
 
 var g;
@@ -3642,13 +2526,1133 @@ module.exports = g;
 
 
 /***/ }),
-/* 24 */
+/* 11 */
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
 module.exports = __webpack_amd_options__;
 
 /* WEBPACK VAR INJECTION */}.call(exports, {}))
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.renderTile = exports.createTile = exports.colorToTileID = exports.tiles = exports.tileIDs = undefined;
+
+var _graphics = __webpack_require__(0);
+
+// NOTE(istarnion): These values must match the indices in the tiles array.
+// This is bad, but I'm too sleepy to figure out a cleaner solution
+var tileIDs = exports.tileIDs = {
+    floor: 0,
+    wall: 1,
+    chasm: 2,
+    fallenBlock: 3,
+    powerblock: 10,
+    wire: 11,
+    door: 12,
+    emitter: 13
+};
+
+var tiles = exports.tiles = [{
+    id: tileIDs.floor,
+    solid: false,
+    sprite: "floor1",
+
+    render: function render(x, y) {
+        renderTile(_graphics.sprites[this.sprite], x, y);
+    }
+}, {
+    id: tileIDs.wall,
+    solid: true,
+    sprite: "wall1",
+
+    render: function render(x, y) {
+        renderTile(_graphics.sprites[this.sprite], x, y);
+    }
+}, {
+    id: tileIDs.chasm,
+    solid: true,
+    sprite: "chasm",
+
+    render: function render(x, y) {
+        renderTile(_graphics.sprites[this.sprite], x, y);
+    }
+}, {
+    id: tileIDs.falledBlock,
+    solid: false,
+    numFramesRemainingOnMidFrame: 10,
+
+    render: function render(x, y) {
+        // this.sprite is set outside
+        if (this.numFramesRemainingOnMidFrame > 0) {
+            --this.numFramesRemainingOnMidFrame;
+            this.sprite.currentFrame = 1;
+        } else {
+            this.sprite.currentFrame = 2;
+        }
+
+        this.sprite.draw(x, y);
+    }
+}];
+
+var colorToTileID = exports.colorToTileID = function colorToTileID(color) {
+    /*
+        FFFFFF = Floor
+        0026FF = Wall
+        000000 = Chasm
+        404040 = Nothingness
+        7F0000 = Block
+        FFD800 = EmitterUp
+        FF6A00 = MemoryUp
+        00FF21 = Goal
+        FF0000 = RobotRelay
+        00FFFF = RobotPower
+        B200FF = RobotMagnet
+        57007F = MirrorSW
+        7F6A00 = MirrorSE
+        267F00 = Door
+        808080 = Power
+        FF7F7F = Cable
+    */
+    var hex = color.r << 16 | color.g << 8 | color.b << 0;
+
+    switch (hex) {
+        // Robots have floors under them! Blocks too!
+        case 0xFF0000:
+        case 0x00FFFF:
+        case 0xB200FF:
+        case 0x7F0000:
+        case 0x57007F:
+        case 0x7F6A00:
+        case 0xFFD800:
+        case 0x00FF21:
+        case 0xFF6A00:
+        case 0xFFFFFF:
+            return tileIDs.floor;
+
+        case 0x0026FF:
+            return tileIDs.wall;
+
+        case 0x808080:
+            return tileIDs.powerblock;
+        case 0xFF7F7F:
+            return tileIDs.wire;
+        case 0x267F00:
+            return tileIDs.door;
+
+        case 0x000000:
+            return tileIDs.chasm;
+
+            defualt: console.warn("We don't support color 0x" + hex.toString(16).toUpperCase() + " (yet?)");
+            break;
+    }
+};
+
+var createTile = exports.createTile = function createTile(tile) {
+    var result = {};
+    var tileData = tiles[tile];
+
+    for (var prop in tileData) {
+        if (tileData.hasOwnProperty(prop)) {
+            result[prop] = tileData[prop];
+        }
+    }
+
+    return result;
+};
+
+var renderTile = exports.renderTile = function renderTile(colorOrImage, x, y) {
+    (0, _graphics.drawSprite)(colorOrImage, x, y);
+
+    // For debug:
+    //gfx.strokeStyle = "red";
+    //gfx.strokeRect(48+x*32, 12+y*32, 32, 32);
+};
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Powerblock = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _assets = __webpack_require__(1);
+
+var _animation = __webpack_require__(3);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Powerblock = exports.Powerblock = function () {
+    function Powerblock(x, y) {
+        _classCallCheck(this, Powerblock);
+
+        this.x = x;
+        this.y = y;
+        this.solid = true;
+        this.wires = [];
+        this.doors = [];
+        this.isPowered = false;
+
+        this.sprite = new _animation.Animation(_assets.animations.powerBlock);
+    }
+
+    _createClass(Powerblock, [{
+        key: "setPowerState",
+        value: function setPowerState(p) {
+            if (p === this.isPowered) return;
+
+            this.isPowered = p;
+
+            this.sprite.currentFrame = p ? 1 : 0;
+
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = this.wires[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var wire = _step.value;
+
+                    wire.powered = p;
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+
+            var _iteratorNormalCompletion2 = true;
+            var _didIteratorError2 = false;
+            var _iteratorError2 = undefined;
+
+            try {
+                for (var _iterator2 = this.doors[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                    var door = _step2.value;
+
+                    door.open = p;
+                }
+            } catch (err) {
+                _didIteratorError2 = true;
+                _iteratorError2 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                        _iterator2.return();
+                    }
+                } finally {
+                    if (_didIteratorError2) {
+                        throw _iteratorError2;
+                    }
+                }
+            }
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            this.sprite.draw(this.x, this.y);
+        }
+    }, {
+        key: "initWires",
+        value: function initWires() {
+            var o = 0;
+            var _iteratorNormalCompletion3 = true;
+            var _didIteratorError3 = false;
+            var _iteratorError3 = undefined;
+
+            try {
+                for (var _iterator3 = this.wires[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                    var wire = _step3.value;
+
+                    o = 0;
+                    var _iteratorNormalCompletion4 = true;
+                    var _didIteratorError4 = false;
+                    var _iteratorError4 = undefined;
+
+                    try {
+                        for (var _iterator4 = this.wires[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                            var otherWire = _step4.value;
+
+                            if (wire !== otherWire) {
+                                if (wire.y - otherWire.y === 1 && wire.x === otherWire.x) {
+                                    // above
+                                    o |= 1;
+                                } else if (wire.x - otherWire.x === 1 && wire.y === otherWire.y) {
+                                    // Left
+                                    o |= 2;
+                                }
+                                if (wire.y - otherWire.y === -1 && wire.x === otherWire.x) {
+                                    // Below
+                                    o |= 4;
+                                } else if (wire.x - otherWire.x === -1 && wire.y === otherWire.y) {
+                                    // Right
+                                    o |= 8;
+                                }
+                            }
+                        }
+                    } catch (err) {
+                        _didIteratorError4 = true;
+                        _iteratorError4 = err;
+                    } finally {
+                        try {
+                            if (!_iteratorNormalCompletion4 && _iterator4.return) {
+                                _iterator4.return();
+                            }
+                        } finally {
+                            if (_didIteratorError4) {
+                                throw _iteratorError4;
+                            }
+                        }
+                    }
+
+                    var _iteratorNormalCompletion5 = true;
+                    var _didIteratorError5 = false;
+                    var _iteratorError5 = undefined;
+
+                    try {
+                        for (var _iterator5 = this.doors[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+                            var door = _step5.value;
+
+                            if (wire.y - door.y === 1 && wire.x === door.x) {
+                                // above
+                                o |= 1;
+                            } else if (wire.x - door.x === 1 && wire.y === door.y) {
+                                // Left
+                                o |= 2;
+                            }
+                            if (wire.y - door.y === -1 && wire.x === door.x) {
+                                // Below
+                                o |= 4;
+                            } else if (wire.x - door.x === -1 && wire.y === door.y) {
+                                // Right
+                                o |= 8;
+                            }
+                        }
+                    } catch (err) {
+                        _didIteratorError5 = true;
+                        _iteratorError5 = err;
+                    } finally {
+                        try {
+                            if (!_iteratorNormalCompletion5 && _iterator5.return) {
+                                _iterator5.return();
+                            }
+                        } finally {
+                            if (_didIteratorError5) {
+                                throw _iteratorError5;
+                            }
+                        }
+                    }
+
+                    if (wire.y - this.y === 1 && wire.x === this.x) {
+                        // above
+                        o |= 1;
+                    } else if (wire.x - this.x === 1 && wire.y === this.y) {
+                        // Left
+                        o |= 2;
+                    }
+                    if (wire.y - this.y === -1 && wire.x === this.x) {
+                        // Below
+                        o |= 4;
+                    } else if (wire.x - this.x === -1 && wire.y === this.y) {
+                        // Right
+                        o |= 8;
+                    }
+
+                    if (o === 5) wire.orientation = "v";else if (o === 10) wire.orientation = "h";else if (o === 12) wire.orientation = "se";else if (o === 6) wire.orientation = "sw";else if (o === 9) wire.orientation = "ne";else if (o === 3) wire.orientation = "nw";
+                }
+            } catch (err) {
+                _didIteratorError3 = true;
+                _iteratorError3 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                        _iterator3.return();
+                    }
+                } finally {
+                    if (_didIteratorError3) {
+                        throw _iteratorError3;
+                    }
+                }
+            }
+        }
+    }, {
+        key: "powered",
+        get: function get() {
+            return this.isPowered;
+        }
+    }]);
+
+    return Powerblock;
+}();
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Wire = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _graphics = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Wire = exports.Wire = function () {
+    function Wire(x, y) {
+        _classCallCheck(this, Wire);
+
+        this.x = x;
+        this.y = y;
+        this.solid = false;
+        this.isPowered = false;
+
+        this.currentSprite = "#440000";
+        this.sprite = null;
+        this.o = "";
+    }
+
+    _createClass(Wire, [{
+        key: "earlyRender",
+        value: function earlyRender() {
+            if (!!this.sprite) {
+                (0, _graphics.drawSprite)(this.sprite, this.x, this.y);
+            }
+        }
+    }, {
+        key: "orientation",
+        set: function set(o) {
+            this.o = o;
+            this.sprite = _graphics.sprites["wire_" + o];
+        }
+    }, {
+        key: "powered",
+        set: function set(p) {
+            this.isPowered = p;
+            if (p) {
+                this.sprite = _graphics.sprites["wire_powered_" + this.o];
+            } else {
+                this.sprite = _graphics.sprites["wire_" + this.o];
+            }
+        },
+        get: function get() {
+            return this.isPowered;
+        }
+    }]);
+
+    return Wire;
+}();
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Door = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _assets = __webpack_require__(1);
+
+var _animation = __webpack_require__(3);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Door = exports.Door = function () {
+    function Door(x, y, isHorizontal) {
+        _classCallCheck(this, Door);
+
+        this.x = x;
+        this.y = y;
+        this.solid = true;
+        this.isOpen = false;
+
+        var animName = isHorizontal ? "horizontalDoor" : "verticalDoor";
+        this.openAnim = new _animation.Animation(_assets.animations[animName + "Open"]);
+        this.closeAnim = new _animation.Animation(_assets.animations[animName + "Close"]);
+        this.sprite = this.closeAnim;
+    }
+
+    _createClass(Door, [{
+        key: "update",
+        value: function update(delta) {
+            this.sprite.update(delta);
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            this.sprite.draw(this.x, this.y);
+        }
+    }, {
+        key: "open",
+        set: function set(o) {
+            this.isOpen = o;
+            this.solid = !o;
+            this.sprite = o ? this.openAnim : this.closeAnim;
+            this.sprite.reset();
+        },
+        get: function get() {
+            return this.isOpen;
+        }
+    }]);
+
+    return Door;
+}();
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Block = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _graphics = __webpack_require__(0);
+
+var _assets = __webpack_require__(1);
+
+var _animation = __webpack_require__(3);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Block = exports.Block = function () {
+    function Block(x, y) {
+        _classCallCheck(this, Block);
+
+        this.x = x;
+        this.y = y;
+        this.solid = true;
+
+        this.sprite = new _animation.Animation(_assets.animations.block);
+    }
+
+    _createClass(Block, [{
+        key: "render",
+        value: function render() {
+            this.sprite.draw(this.x, this.y);
+        }
+    }]);
+
+    return Block;
+}();
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Goal = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _assets = __webpack_require__(1);
+
+var _animation = __webpack_require__(3);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Goal = exports.Goal = function () {
+    function Goal(x, y) {
+        _classCallCheck(this, Goal);
+
+        this.x = x;
+        this.y = y;
+        this.solid = true;
+
+        this.sprite = new _animation.Animation(_assets.animations.goal);
+    }
+
+    _createClass(Goal, [{
+        key: "update",
+        value: function update(delta) {
+            this.sprite.update(delta);
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            this.sprite.draw(this.x, this.y);
+        }
+    }]);
+
+    return Goal;
+}();
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Emitter = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _assets = __webpack_require__(1);
+
+var _animation = __webpack_require__(3);
+
+var _utils = __webpack_require__(2);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Emitter = exports.Emitter = function () {
+    function Emitter(x, y) {
+        _classCallCheck(this, Emitter);
+
+        this.x = x;
+        this.y = y;
+        this.solid = true;
+
+        this.sprite = new _animation.Animation(_assets.animations.emitter);
+
+        this.laserBeams = [];
+
+        this.direction = _utils.Directions.up;
+    }
+
+    _createClass(Emitter, [{
+        key: "update",
+        value: function update(delta) {
+            this.sprite.update(delta);
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = this.laserBeams[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var beam = _step.value;
+
+                    beam.update(delta);
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            this.sprite.draw(this.x, this.y, 0, 0, this.direction);
+
+            var _iteratorNormalCompletion2 = true;
+            var _didIteratorError2 = false;
+            var _iteratorError2 = undefined;
+
+            try {
+                for (var _iterator2 = this.laserBeams[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                    var beam = _step2.value;
+
+                    beam.render();
+                }
+            } catch (err) {
+                _didIteratorError2 = true;
+                _iteratorError2 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                        _iterator2.return();
+                    }
+                } finally {
+                    if (_didIteratorError2) {
+                        throw _iteratorError2;
+                    }
+                }
+            }
+        }
+    }]);
+
+    return Emitter;
+}();
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.LaserBeam = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _assets = __webpack_require__(1);
+
+var _animation = __webpack_require__(3);
+
+var _utils = __webpack_require__(2);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var LaserBeam = exports.LaserBeam = function () {
+    function LaserBeam(x, y, dir, ext) {
+        _classCallCheck(this, LaserBeam);
+
+        this.x = x;
+        this.y = y;
+
+        if (ext.length > 0) {
+            this.direction = _utils.Directions.up;
+        } else {
+            this.direction = dir;
+        }
+
+        this.sprite = new _animation.Animation(_assets.animations["laser" + ext]);
+    }
+
+    _createClass(LaserBeam, [{
+        key: "update",
+        value: function update(delta) {
+            this.sprite.update(delta);
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            this.sprite.draw(this.x, this.y, 0, 0, this.direction);
+        }
+    }]);
+
+    return LaserBeam;
+}();
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Mirror = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _graphics = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Mirror = exports.Mirror = function () {
+    function Mirror(x, y, orientation) {
+        _classCallCheck(this, Mirror);
+
+        this.x = x;
+        this.y = y;
+        this.solid = true;
+        this.isMirror = true;
+        this.orientation = orientation;
+
+        this.sprite = _graphics.sprites["mirror_" + orientation];
+    }
+
+    _createClass(Mirror, [{
+        key: "render",
+        value: function render() {
+            (0, _graphics.drawSprite)(this.sprite, this.x, this.y);
+        }
+    }]);
+
+    return Mirror;
+}();
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Robot = exports.RobotTypes = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _graphics = __webpack_require__(0);
+
+var _assets = __webpack_require__(1);
+
+var _animation = __webpack_require__(3);
+
+var _utils = __webpack_require__(2);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var RobotTypes = exports.RobotTypes = {
+    power: 0,
+    magnet: 1, mirror: 2
+};
+
+var Robot = exports.Robot = function () {
+    function Robot(type) {
+        _classCallCheck(this, Robot);
+
+        this.type = type;
+
+        switch (type) {
+            case RobotTypes.power:
+                this.animDown = new _animation.Animation(_assets.animations.powerBotDown);
+                this.animIdle = new _animation.Animation(_assets.animations.powerBotIdle);
+                this.animWalk = new _animation.Animation(_assets.animations.powerBotWalk);
+                break;
+            case RobotTypes.magnet:
+                this.animDown = new _animation.Animation(_assets.animations.magnetBotDown);
+                this.animIdle = new _animation.Animation(_assets.animations.magnetBotIdle);
+                this.animWalk = new _animation.Animation(_assets.animations.magnetBotWalk);
+                break;
+            case RobotTypes.mirror:
+                this.animDown = new _animation.Animation(_assets.animations.mirrorBotDown);
+                this.animIdle = new _animation.Animation(_assets.animations.mirrorBotIdle);
+                this.animWalk = new _animation.Animation(_assets.animations.mirrorBotWalk);
+                break;
+            default:
+                console.warn("Buggy creation of robots!");
+        }
+
+        this.currAnim = this.animDown;
+
+        this.x = 0;
+        this.y = 0;
+
+        this.dir = _utils.Directions.up;
+        this.moving = false;
+        this.moveTime = 0;
+
+        this.offsetX = 0;
+        this.offsetY = 0;
+        this.deltaX = 0;
+        this.deltaY = 0;
+
+        this.speed = 160;
+    }
+
+    _createClass(Robot, [{
+        key: "setPosition",
+        value: function setPosition(x, y) {
+            this.x = x;
+            this.y = y;
+        }
+    }, {
+        key: "move",
+        value: function move(direction, x, y) {
+            this.moving = true;
+            if (direction !== this.dir) {
+                this.moveTime = 0.2;
+                this.dir = direction;
+            } else {
+                this.currAnim = this.animWalk;
+                if (this.x < x) {
+                    this.offsetX = -32;
+                    this.deltaX = this.speed;
+                } else if (this.x > x) {
+                    this.offsetX = 32;
+                    this.deltaX = -this.speed;
+                } else if (this.y < y) {
+                    this.offsetY = -32;
+                    this.deltaY = this.speed;
+                } else if (this.y > y) {
+                    this.offsetY = 32;
+                    this.deltaY = -this.speed;
+                }
+
+                this.x = x;
+                this.y = y;
+            }
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            this.currAnim.draw(this.x, this.y, this.offsetX, this.offsetY, this.dir);
+        }
+    }, {
+        key: "update",
+        value: function update(deltaTime) {
+            this.currAnim.update(deltaTime);
+
+            if (this.moving) {
+                this.moveTime = Math.max(0, this.moveTime - deltaTime);
+
+                this.offsetX += this.deltaX * deltaTime;
+                this.offsetY += this.deltaY * deltaTime;
+
+                if (this.dir === _utils.Directions.up) {
+                    this.offsetX = 0;
+                    if (this.offsetY < 0) {
+                        this.offsetY = 0;
+                    }
+                } else if (this.dir === _utils.Directions.right) {
+                    this.offsetY = 0;
+                    if (this.offsetX > 0) {
+                        this.offsetX = 0;
+                    }
+                } else if (this.dir === _utils.Directions.down) {
+                    this.offsetX = 0;
+                    if (this.offsetY > 0) {
+                        this.offsetY = 0;
+                    }
+                } else if (this.dir === _utils.Directions.left) {
+                    this.offsetY = 0;
+                    if (this.offsetX < 0) {
+                        this.offsetX = 0;
+                    }
+                }
+
+                if (this.moveTime === 0 && this.offsetX === 0 && this.offsetY === 0) {
+                    this.currAnim = this.animIdle;
+                    this.deltaX = this.deltaY = 0;
+                    this.moving = false;
+                }
+            }
+        }
+    }, {
+        key: "active",
+        set: function set(a) {
+            if (a) this.currAnim = this.animIdle;else this.currAnim = this.animDown;
+            this.currAnim.reset();
+        }
+    }]);
+
+    return Robot;
+}();
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Cursor = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _graphics = __webpack_require__(0);
+
+var _utils = __webpack_require__(2);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+;
+
+var Cursor = exports.Cursor = function () {
+    function Cursor(x, y) {
+        _classCallCheck(this, Cursor);
+
+        this.targetX = x;
+        this.targetY = y;
+        this.offsetX = 0;
+        this.offsetY = 0;
+
+        this.speed = 2048;
+        this.bounceSpeed = 6;
+        this.theta = 0;
+
+        this.sprite = _graphics.sprites["cursor"];
+    }
+
+    _createClass(Cursor, [{
+        key: "setTarget",
+        value: function setTarget(x, y) {
+            if (x !== this.targetX || y !== this.targetY) {
+                this.offsetX = (this.targetX - x) * 32;
+                this.offsetY = (this.targetY - y) * 32;
+                this.targetX = x;
+                this.targetY = y;
+            }
+        }
+    }, {
+        key: "update",
+        value: function update(delta) {
+            this.theta += this.bounceSpeed * delta;
+            if (this.theta > 2 * Math.PI) {
+                this.theta -= 2 * Math.PI;
+            }
+
+            var dx = -this.offsetX;
+            var dy = -this.offsetY;
+            var len = Math.sqrt(dx * dx + dy * dy);
+            if (Math.abs(len) > this.speed * delta) {
+                this.offsetX += dx / len * this.speed * delta;
+                this.offsetY += dy / len * this.speed * delta;
+            } else {
+                this.offsetX = this.offsetY = 0;
+            }
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            var radius = 16 + Math.sin(this.theta) * 4;
+
+            (0, _graphics.drawSprite)(this.sprite, this.targetX, this.targetY, this.offsetX - radius, this.offsetY - radius, _utils.Directions.up);
+            (0, _graphics.drawSprite)(this.sprite, this.targetX, this.targetY, this.offsetX + radius, this.offsetY - radius, _utils.Directions.right);
+            (0, _graphics.drawSprite)(this.sprite, this.targetX, this.targetY, this.offsetX + radius, this.offsetY + radius, _utils.Directions.down);
+            (0, _graphics.drawSprite)(this.sprite, this.targetX, this.targetY, this.offsetX - radius, this.offsetY + radius, _utils.Directions.left);
+        }
+    }]);
+
+    return Cursor;
+}();
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.MainMenu = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _graphics = __webpack_require__(0);
+
+var _input = __webpack_require__(5);
+
+var _app = __webpack_require__(4);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var MainMenu = exports.MainMenu = function () {
+    function MainMenu() {
+        _classCallCheck(this, MainMenu);
+
+        this.playSelected = true;
+    }
+
+    _createClass(MainMenu, [{
+        key: "updateAndRender",
+        value: function updateAndRender(delta) {
+            if (_input.input.isKeyJustPressed("up") || _input.input.isKeyJustPressed("down")) {
+                this.playSelected = !this.playSelected;
+            } else if (_input.input.isKeyJustPressed("e")) {
+                if (this.playSelected) {
+                    (0, _app.startGame)();
+                } else {
+                    (0, _app.startCredits)();
+                }
+            }
+
+            _graphics.gfx.drawImage(_graphics.sprites["menuBG"], 0, 0);
+
+            _graphics.gfx.drawImage(_graphics.sprites["playButton"], this.playSelected ? 256 : 0, 0, 256, 128, 136, 133, 256, 128);
+
+            _graphics.gfx.drawImage(_graphics.sprites["creditsButton"], this.playSelected ? 0 : 256, 0, 256, 128, 136, 339, 256, 128);
+        }
+    }]);
+
+    return MainMenu;
+}();
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Credits = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _graphics = __webpack_require__(0);
+
+var _input = __webpack_require__(5);
+
+var _app = __webpack_require__(4);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Credits = exports.Credits = function () {
+    function Credits() {
+        _classCallCheck(this, Credits);
+    }
+
+    _createClass(Credits, [{
+        key: "updateAndRender",
+        value: function updateAndRender(delta) {
+            if (_input.input.isKeyJustPressed("e")) {
+                (0, _app.startMenu)();
+            }
+
+            _graphics.gfx.drawImage(_graphics.sprites["creditsBG"], 0, 0);
+
+            _graphics.gfx.drawImage(_graphics.sprites["backButton"], 256, 0, 256, 128, 405, 394, 256, 128);
+        }
+    }]);
+
+    return Credits;
+}();
 
 /***/ })
 /******/ ]);
