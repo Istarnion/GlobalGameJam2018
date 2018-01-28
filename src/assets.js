@@ -47,7 +47,8 @@ export const images = {
 
     cursor: "res/sprites/CursorCorner.png",
 
-    tutorial: "res/sprites/TutorialTextFinish.png"
+    tutorial: "res/sprites/TutorialTextFinish.png",
+    hint: "res/sprites/GetLaserHereToWinBigBlueNew.png"
 };
 
 export const animations = {

@@ -169,10 +169,6 @@ export class Game {
             this.state = "fadingOut";
         }
 
-        for(const d of this.decor) {
-            gfx.drawImage(sprites[d.image], d.x, d.y);
-        }
-
         // Render tiles:
         for(let y = 0; y<this.height; ++y) {
             for(let x=0; x<this.width; ++x) {
@@ -181,6 +177,10 @@ export class Game {
                     tile.render(x, y);
                 }
             }
+        }
+
+        for(const d of this.decor) {
+            gfx.drawImage(sprites[d.image], d.x, d.y);
         }
 
         for(const obj of this.objects) {

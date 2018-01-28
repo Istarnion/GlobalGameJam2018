@@ -7,6 +7,11 @@ export const maps = [
                 image: "tutorial",
                 x: 595,
                 y: 380
+            },
+            {
+                image: "hint",
+                x: 371,
+                y: 300
             }
         ]
     }
