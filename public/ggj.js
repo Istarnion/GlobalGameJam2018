@@ -3074,31 +3074,30 @@ var MusicManager = function () {
         // Load sounds
         this.sounds = {};
         this.sounds.echo = new _howlerMin.Howl({
-            src: ['/res/sounds/SFXEcho.mp3']
+            src: ['res/sounds/SFXEcho.mp3']
         });
         this.sounds.blockDrag = new _howlerMin.Howl({
-            src: ['/res/sounds/SFXBlockDrag.mp3']
+            src: ['res/sounds/SFXBlockDrag.mp3']
         });
         this.sounds.blockFall = new _howlerMin.Howl({
-            src: ['/res/sounds/SFXBlockDragFall.mp3']
+            src: ['res/sounds/SFXBlockDragFall.mp3']
         });
         // Load music
         this.music = {};
         this.music.startDrone = new _howlerMin.Howl({
-            src: ['/res/sounds/BassDrone_Start.mp3'],
+            src: ['res/sounds/BassDrone_Start.mp3'],
             onend: function onend() {
                 _this.music.loopDrone.play();
             }
         });
         this.music.loopDrone = new _howlerMin.Howl({
-            src: ['/res/sounds/BassDrone_Cont.mp3'],
+            src: ['res/sounds/BassDrone_Cont.mp3'],
             loop: true
         });
 
         // Load ambientSounds
         this.ambientSounds = [];
         this.ambientSounds.push(new _howlerMin.Howl({ src: ['res/sounds/ambience_01.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_02.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_03.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_04.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_05.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_06.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_07.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_08.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_09.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_10.ogg'] }));
-        console.log(_howlerMin.Howler.codecs("ogg"));
     }
 
     _createClass(MusicManager, [{
