@@ -461,7 +461,11 @@ export class Game {
                         return;
                     }
                     else {
-                        return;
+                        if(!(
+                            (obj instanceof Wire) ||
+                            (obj instanceof Door && obj.open))) {
+                            return;
+                        }
                     }
                 }
             }
