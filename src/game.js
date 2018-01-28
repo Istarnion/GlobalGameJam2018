@@ -1,3 +1,4 @@
+import { startCredits } from "./app.js";
 import { gfx, sprites, getBitmap } from "./graphics.js";
 import { input } from "./input.js";
 import { tileIDs, colorToTileID, createTile, renderTile } from "./tiles.js";
@@ -142,7 +143,7 @@ export class Game {
             if(this.fadeLevel === 1) {
                 this.currentLevel++;
                 if(this.currentLevel >= maps.length) {
-                    // Game complete
+                    startCredits();
                 }
                 else {
                     this.level = this.loadCurrentLevel();

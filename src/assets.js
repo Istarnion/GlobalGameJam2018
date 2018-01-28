@@ -1,4 +1,10 @@
 export const images = {
+    menuBG: "res/sprites/MenuScreenBackground.png",
+    creditsBG: "res/sprites/CreditsScreen.png",
+    playButton: "res/sprites/MainMenuPlayButton.png",
+    creditsButton: "res/sprites/MainMenuCreditsButton.png",
+    backButton: "res/sprites/BackButton.png",
+
     floor1: "res/sprites/FloorTileBaseAlt.png",
     wall1: "res/sprites/Wall1.png",
     wall2: "res/sprites/Wall2.png",
@@ -58,7 +64,7 @@ export const animations = {
     emitter: {
         image: "emitter",
         timePerFrame: 0.3,
-        looping: "once",
+        looping: "loop",
         frames: [
             { x: 0, y: 0, w: 32, h: 32 },
             { x: 32, y: 0, w: 32, h: 32 }

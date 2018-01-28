@@ -2,6 +2,8 @@ import { gfx, setGameSize, clear, loadImages } from "./graphics.js";
 import { images } from "./assets.js";
 import { input } from "./input.js";
 import { Game } from "./game.js";
+import { MainMenu } from "./menu.js";
+import { Credits } from "./credits.js";
 import { maps } from "./maps.js";
 import { musicManager } from "./musicManager";
 
@@ -12,11 +14,30 @@ gfx.fillText("Loading...", gfx.width / 2, gfx.height / 2);
 let prevTime = performance.now();
 
 let game = null;
+let mainMenu = null;
+let credits = null;
 
-const init = () => {
+export let gameState = "MainMenu";
+
+export const startGame = () => {
     game = new Game();
     game.init();
     musicManager.beginLevel();
+    gameState = "Game";
+};
+
+export const startCredits = () => {
+    credits = new Credits();
+    gameState = "Credits";
+}
+
+export const startMenu = () => {
+    mainMenu = new MainMenu();
+    gameState = "MainMenu";
+}
+
+const init = () => {
+    startMenu();
 }
 
 const update = () => {
@@ -28,10 +49,20 @@ const update = () => {
     input.update();
     musicManager.update(deltaTime);
 
-    game.updateAndRender(deltaTime);
+    switch(gameState) {
+        case "MainMenu":
+            mainMenu.updateAndRender(deltaTime);
+            break;
+        case "Game":
+            game.updateAndRender(deltaTime);
+            break;
+        case "Credits":
+            credits.updateAndRender(deltaTime);
+            break;
+        default: break;
+    }
 
     window.requestAnimationFrame(update);
-
     input.lateUpdate();
 }
 
