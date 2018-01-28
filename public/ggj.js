@@ -1248,6 +1248,10 @@ var maps = exports.maps = [{
         x: 371,
         y: 300
     }]
+}, {
+    tiles: "res/levels/Map02Tiles.png",
+    wire: "res/levels/Map02Wire.png",
+    decor: []
 }];
 
 /***/ }),
@@ -1396,6 +1400,7 @@ var Game = exports.Game = function () {
                     if (_input.input.isKeyJustPressed("e")) {
                         if (this.activeBot === this.powerBot) {
                             this.updatePowerBotActivation(true);
+                            this.updateEmitterLaser();
                         } else if (this.activeBot === this.magnetBot) {
                             this.magnetBotPushPull(true);
                             this.updateEmitterLaser();
@@ -1699,6 +1704,10 @@ var Game = exports.Game = function () {
                                             blocked = true;
                                         }
                                     }
+                                } else if (obj instanceof _door.Door) {
+                                    if (!obj.open) {
+                                        blocked = true;
+                                    }
                                 } else {
                                     blocked = true;
                                 }
@@ -1913,6 +1922,7 @@ var Game = exports.Game = function () {
             var tiles = (0, _graphics.getBitmap)(name + "_tiles");
             var wires = (0, _graphics.getBitmap)(name + "_wire");
             var map = [];
+            this.objects.length = 0;
 
             for (var y = 0; y < tiles.height; ++y) {
                 map.push([]);
@@ -1941,7 +1951,11 @@ var Game = exports.Game = function () {
                                 this.objects.push(new _block.Block(x, y));
                                 break;
                             case 0xFFD800:
-                                this.emitter = new _emitter.Emitter(x, y);
+                                this.emitter = new _emitter.Emitter(x, y, _utils.Directions.up);
+                                this.objects.push(this.emitter);
+                                break;
+                            case 0xDE00FF:
+                                this.emitter = new _emitter.Emitter(x, y, _utils.Directions.down);
                                 this.objects.push(this.emitter);
                                 break;
                             case 0xFF6A00:
@@ -1997,7 +2011,7 @@ var Game = exports.Game = function () {
                                 } else if (id === _tiles.tileIDs.door) {
                                     var isHorizontal = false;
                                     var tileAbove = map[_y - 1][_x];
-                                    if (!!tileAbove && tileAbove.solid) isHorizontal = true;
+                                    if (!!tileAbove && tileAbove.id === _tiles.tileIDs.wall) isHorizontal = true;
                                     var door = new _door.Door(_x, _y, isHorizontal);
                                     powerblock.doors.push(door);
                                     _this.objects.push(door);
@@ -2611,6 +2625,7 @@ var colorToTileID = exports.colorToTileID = function colorToTileID(color) {
         404040 = Nothingness
         7F0000 = Block
         FFD800 = EmitterUp
+        DE00FF = EmitterDown
         FF6A00 = MemoryUp
         00FF21 = Goal
         FF0000 = RobotRelay
@@ -2633,6 +2648,7 @@ var colorToTileID = exports.colorToTileID = function colorToTileID(color) {
         case 0x57007F:
         case 0x7F6A00:
         case 0xFFD800:
+        case 0xDE00FF:
         case 0x00FF21:
         case 0xFF6A00:
         case 0xFFFFFF:
@@ -3144,7 +3160,7 @@ var _utils = __webpack_require__(2);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Emitter = exports.Emitter = function () {
-    function Emitter(x, y) {
+    function Emitter(x, y, dir) {
         _classCallCheck(this, Emitter);
 
         this.x = x;
@@ -3155,7 +3171,7 @@ var Emitter = exports.Emitter = function () {
 
         this.laserBeams = [];
 
-        this.direction = _utils.Directions.up;
+        this.direction = dir;
     }
 
     _createClass(Emitter, [{
