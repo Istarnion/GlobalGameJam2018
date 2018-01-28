@@ -3,13 +3,18 @@ import { Animation } from "./animation.js";
 import { Directions } from "./utils.js";
 
 export class LaserBeam {
-    constructor(x, y, dir) {
+    constructor(x, y, dir, ext) {
         this.x = x;
         this.y = y;
 
-        this.direction = dir;
+        if(ext.length > 0) {
+            this.direction = Directions.up;
+        }
+        else {
+            this.direction = dir;
+        }
 
-        this.sprite = new Animation(animations.laser);
+        this.sprite = new Animation(animations[`laser${ext}`]);
     }
 
     update(delta) {

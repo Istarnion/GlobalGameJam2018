@@ -21,11 +21,16 @@ export const images = {
     wire_powered_h: "res/sprites/WireHorizontalPowered.png",
     wire_powered_v: "res/sprites/WireVerticalPowered.png",
 
+    block: "res/sprites/Block.png",
     powerBlock: "res/sprites/PowerBlock.png",
     horizontalDoor: "res/sprites/DoorVertical.png",
     verticalDoor: "res/sprites/DoorHorizontal.png",
 
     laser: "res/sprites/LaserbeamGREEN.png",
+    laser_ne: "res/sprites/LaserbeamGREENNE.png",
+    laser_nw: "res/sprites/LaserbeamGREENNW.png",
+    laser_se: "res/sprites/LaserbeamGREENSE.png",
+    laser_sw: "res/sprites/LaserbeamGREENSW.png",
 
     mirror_ne: "res/sprites/MirrorBlockNE.png",
     mirror_nw: "res/sprites/MirrorBlockNW.png",
@@ -34,10 +39,22 @@ export const images = {
 
     goal: "res/sprites/MainframeGoal.png",
 
-    cursor: "res/sprites/CursorCorner.png"
+    cursor: "res/sprites/CursorCorner.png",
+
+    tutorial: "res/sprites/TutorialTextFinish.png"
 };
 
 export const animations = {
+    block: {
+        image: "block",
+        timePerFrame: 0.1,
+        looping: "once",
+        frames: [
+            { x: 0, y: 0, w: 32, h: 32 },
+            { x: 32, y: 0, w: 32, h: 32 },
+            { x: 64, y: 0, w: 32, h: 32 }
+        ]
+    },
     emitter: {
         image: "emitter",
         timePerFrame: 0.3,
@@ -49,6 +66,42 @@ export const animations = {
     },
     laser: {
         image: "laser",
+        timePerFrame: 0.05,
+        looping: "loop",
+        frames: [
+            { x: 0, y: 0, w: 32, h: 32 },
+            { x: 32, y: 0, w: 32, h: 32 }
+        ]
+    },
+    laser_ne: {
+        image: "laser_ne",
+        timePerFrame: 0.05,
+        looping: "loop",
+        frames: [
+            { x: 0, y: 0, w: 32, h: 32 },
+            { x: 32, y: 0, w: 32, h: 32 }
+        ]
+    },
+    laser_nw: {
+        image: "laser_nw",
+        timePerFrame: 0.05,
+        looping: "loop",
+        frames: [
+            { x: 0, y: 0, w: 32, h: 32 },
+            { x: 32, y: 0, w: 32, h: 32 }
+        ]
+    },
+    laser_se: {
+        image: "laser_se",
+        timePerFrame: 0.05,
+        looping: "loop",
+        frames: [
+            { x: 0, y: 0, w: 32, h: 32 },
+            { x: 32, y: 0, w: 32, h: 32 }
+        ]
+    },
+    laser_sw: {
+        image: "laser_sw",
         timePerFrame: 0.05,
         looping: "loop",
         frames: [

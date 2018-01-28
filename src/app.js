@@ -49,10 +49,6 @@ for(let i=0; i<maps.length; ++i) {
     if(maps[i].hasOwnProperty("wire")) {
         imagesToLoad.push([ name+"wire", maps[i].wire ]);
     }
-
-    if(maps[i].hasOwnProperty("decor")) {
-        imagesToLoad.push([ name+"decor", maps[i].decor ]);
-    }
 }
 
 loadImages(imagesToLoad).then(() => {

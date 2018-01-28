@@ -5,10 +5,11 @@ export const tileIDs = {
     floor: 0,
     wall: 1,
     chasm: 2,
-    emitter: 3,
+    fallenBlock: 3,
     powerblock: 10,
     wire: 11,
     door: 12,
+    emitter: 13,
 };
 
 export const tiles = [
@@ -39,6 +40,24 @@ export const tiles = [
             renderTile(sprites[this.sprite], x, y);
         }
     },
+    {
+        id: tileIDs.falledBlock,
+        solid: false,
+        numFramesRemainingOnMidFrame: 10,
+
+        render: function(x, y) {
+            // this.sprite is set outside
+            if(this.numFramesRemainingOnMidFrame > 0) {
+                --this.numFramesRemainingOnMidFrame;
+                this.sprite.currentFrame = 1;
+            }
+            else {
+                this.sprite.currentFrame = 2;
+            }
+
+            this.sprite.draw(x, y);
+        }
+    }
 ];
 
 export const colorToTileID = (color) => {

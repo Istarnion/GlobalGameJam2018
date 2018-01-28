@@ -1,4 +1,4 @@
-import { gfx, getBitmap } from "./graphics.js";
+import { gfx, sprites, getBitmap } from "./graphics.js";
 import { input } from "./input.js";
 import { tileIDs, colorToTileID, createTile, renderTile } from "./tiles.js";
 import { maps } from "./maps.js";
@@ -12,7 +12,7 @@ import { LaserBeam } from "./laserbeam.js";
 import { Mirror } from "./mirror.js";
 
 import { RobotTypes, Robot } from "./robot.js";
-import { Directions } from "./utils.js";
+import { Directions, removeFromArray } from "./utils.js";
 import { Cursor } from "./cursor.js";
 
 export class Game {
@@ -23,6 +23,7 @@ export class Game {
         this.objects = [];
         this.emitter = null;
         this.goal = null;
+        this.decor = [];
 
         this.powerBot = new Robot(RobotTypes.power);
         this.magnetBot = new Robot(RobotTypes.magnet);
@@ -35,6 +36,7 @@ export class Game {
         this.fadeLevel = 1.0;
 
         this.cursor = null;
+        this.levelComplete = false;
     }
 
     init() {
@@ -92,7 +94,7 @@ export class Game {
                 else if(move === Directions.down) targetY++;
                 else if(move === Directions.left) targetX--;
 
-                if(!this.canRobotWalkTo(this.activeBot, targetX, targetY)) {
+                if(!this.canRobotWalkTo(targetX, targetY)) {
                     // U cannot go here!
                     targetX = this.activeBot.x;
                     targetY = this.activeBot.y;
@@ -110,20 +112,32 @@ export class Game {
                 }
             }
             else {
-                if(input.isKeyDown("e")) {
+                if(input.isKeyJustPressed("e")) {
                     if(this.activeBot === this.powerBot) {
                         this.updatePowerBotActivation(true);
+                    }
+                    else if(this.activeBot === this.magnetBot) {
+                        this.magnetBotPushPull(true);
+                        this.updateEmitterLaser();
+                    }
+                }
+                else if(input.isKeyJustPressed("q")) {
+                    if(this.activeBot === this.magnetBot) {
+                        this.magnetBotPushPull(false);
+                        this.updateEmitterLaser();
                     }
                 }
             }
 
             this.cursor.setTarget(this.activeBot.x, this.activeBot.y);
         }
-        else if(this.state === "fadingIn") { this.fadeLevel = Math.max(0, this.fadeLevel - delta); if(this.fadeLevel === 0) {
+        else if(this.state === "fadingIn") {
+            this.fadeLevel = Math.max(0, this.fadeLevel - delta);
+            if(this.fadeLevel === 0) {
                 this.state = "normal";
             }
         }
-        else if(this.state === "fadingIn") {
+        else if(this.state === "fadingOut") {
             this.fadeLevel = Math.min(1, this.fadeLevel + delta);
             if(this.fadeLevel === 1) {
                 this.currentLevel++;
@@ -150,8 +164,13 @@ export class Game {
             }
         }
 
+        if(this.state === "normal" && this.levelComplete) {
+            this.state = "fadingOut";
+        }
 
-        // If level complete, fade out. If no more levels, go to victory screen, else load next level
+        for(const d of this.decor) {
+            gfx.drawImage(sprites[d.image], d.x, d.y);
+        }
 
         // Render tiles:
         for(let y = 0; y<this.height; ++y) {
@@ -164,7 +183,15 @@ export class Game {
         }
 
         for(const obj of this.objects) {
-            obj.render();
+            if(!!obj.earlyRender) {
+                obj.earlyRender();
+            }
+        }
+
+        for(const obj of this.objects) {
+            if(!!obj.render) {
+                obj.render();
+            }
         }
 
         this.powerBot.render();
@@ -182,7 +209,7 @@ export class Game {
         return this.level[y][x];
     }
 
-    canRobotWalkTo(robot, x, y) {
+    canRobotWalkTo(x, y) {
         let blocked = false;
         const targetTile = this.getTileAt(x, y);
         if(!!targetTile && targetTile.solid) {
@@ -198,11 +225,9 @@ export class Game {
 
             if(!blocked) {
                 for(const r of [this.magnetBot, this.powerBot, this.mirrorBot]) {
-                    if(r !== robot) {
-                        if(x === r.x && y === r.y) {
-                            blocked = true;
-                            break;
-                        }
+                    if(x === r.x && y === r.y) {
+                        blocked = true;
+                        break;
                     }
                 }
             }
@@ -224,6 +249,7 @@ export class Game {
                 default: break;
             }
 
+            let ext = "";
             let blocked = false;
             const targetTile = this.getTileAt(currCoord.x, currCoord.y);
             if(!!targetTile && targetTile.solid && targetTile.id !== tileIDs.chasm) {
@@ -232,7 +258,67 @@ export class Game {
             else {
                 for(const obj of this.objects) {
                     if(obj.x === currCoord.x && obj.y === currCoord.y && !!obj.solid) {
-                        blocked = true;
+                        if(obj instanceof Goal) {
+                            this.levelComplete = true;
+                            blocked = true;
+                        }
+                        else if(obj instanceof Mirror) {
+                            if(currDir === Directions.up) {
+                                if(obj.orientation === "sw") {
+                                    ext = "_sw";
+                                    currDir = Directions.left;
+                                }
+                                else if(obj.orientation === "se") {
+                                    ext = "_se";
+                                    currDir = Directions.right;
+                                }
+                                else {
+                                    blocked = true;
+                                }
+                            }
+                            else if(currDir === Directions.right) {
+                                if(obj.orientation === "sw") {
+                                    ext = "_sw";
+                                    currDir = Directions.down;
+                                }
+                                else if(obj.orientation === "nw") {
+                                    ext = "_nw";
+                                    currDir = Directions.up;
+                                }
+                                else {
+                                    blocked = true;
+                                }
+                            }
+                            else if(currDir === Directions.down) {
+                                if(obj.orientation === "nw") {
+                                    ext = "_nw";
+                                    currDir = Directions.left;
+                                }
+                                else if(obj.orientation === "ne") {
+                                    ext = "_ne";
+                                    currDir = Directions.right;
+                                }
+                                else {
+                                    blocked = true;
+                                }
+                            }
+                            else if(currDir === Directions.left) {
+                                if(obj.orientation === "ne") {
+                                    ext = "_ne";
+                                    currDir = Directions.up;
+                                }
+                                else if(obj.orientation === "se") {
+                                    ext = "_se";
+                                    currDir = Directions.down;
+                                }
+                                else {
+                                    blocked = true;
+                                }
+                            }
+                        }
+                        else {
+                            blocked = true;
+                        }
                         break;
                     }
                 }
@@ -240,7 +326,63 @@ export class Game {
                 if(!blocked) {
                     for(const r of [this.magnetBot, this.powerBot, this.mirrorBot]) {
                         if(currCoord.x === r.x && currCoord.y === r.y) {
-                            blocked = true;
+                            if(r === this.mirrorBot) {
+                                if(currDir === Directions.up) {
+                                    if(r.dir === Directions.down) {
+                                        ext = "_sw";
+                                        currDir = Directions.left;
+                                    }
+                                    else if(r.dir === Directions.right) {
+                                        ext = "_se";
+                                        currDir = Directions.right;
+                                    }
+                                    else {
+                                        blocked = true;
+                                    }
+                                }
+                                else if(currDir === Directions.right) {
+                                    if(r.dir === Directions.down) {
+                                        ext = "_sw";
+                                        currDir = Directions.down;
+                                    }
+                                    else if(r.dir === Directions.left) {
+                                        ext = "_nw";
+                                        currDir = Directions.up;
+                                    }
+                                    else {
+                                        blocked = true;
+                                    }
+                                }
+                                else if(currDir === Directions.down) {
+                                    if(r.dir === Directions.left) {
+                                        ext = "_nw";
+                                        currDir = Directions.left;
+                                    }
+                                    else if(r.dir === Directions.up) {
+                                        ext = "_ne";
+                                        currDir = Directions.right;
+                                    }
+                                    else {
+                                        blocked = true;
+                                    }
+                                }
+                                else if(currDir === Directions.left) {
+                                    if(r.dir === Directions.up) {
+                                        ext = "_ne";
+                                        currDir = Directions.up;
+                                    }
+                                    else if(r.dir === Directions.right) {
+                                        ext = "_se";
+                                        currDir = Directions.down;
+                                    }
+                                    else {
+                                        blocked = true;
+                                    }
+                                }
+                            }
+                            else {
+                                blocked = true;
+                            }
                             break;
                         }
                     }
@@ -248,7 +390,7 @@ export class Game {
             }
 
             if(blocked) break;
-            else this.emitter.laserBeams.push(new LaserBeam(currCoord.x, currCoord.y, currDir));
+            else this.emitter.laserBeams.push(new LaserBeam(currCoord.x, currCoord.y, currDir, ext));
         }
     }
 
@@ -272,15 +414,63 @@ export class Game {
         }
     }
 
+    magnetBotPushPull(push) {
+        let dx = 0;
+        let dy = 0;
+        switch(this.magnetBot.dir) {
+            case Directions.up: --dy; break;
+            case Directions.right: ++dx; break;
+            case Directions.down: ++dy; break;
+            case Directions.left: --dx; break;
+        }
+
+        const currCoord = { x: this.magnetBot.x, y: this.magnetBot.y };
+        while(true) {
+            currCoord.x += dx;
+            currCoord.y += dy;
+
+            const targetTile = this.getTileAt(currCoord.x, currCoord.y);
+            if(!!targetTile && targetTile.solid) {
+                // Can't move solid tiles
+                return;
+            }
+
+            for(const obj of this.objects) {
+                if(obj.x === currCoord.x && obj.y === currCoord.y) {
+                    if(
+                        (obj instanceof Block) ||
+                        (obj instanceof Mirror)) {
+
+                        const targetX = currCoord.x + dx * (push ? 1 : -1);
+                        const targetY = currCoord.y + dy * (push ? 1 : -1);
+
+                        if(this.canRobotWalkTo(targetX, targetY)) {
+                            obj.x = targetX;
+                            obj.y = targetY;
+                        }
+                        else if((obj instanceof Block) && this.getTileAt(targetX, targetY).id === tileIDs.chasm) {
+                            this.level[targetY][targetX] = createTile(tileIDs.fallenBlock);
+                            this.level[targetY][targetX].sprite = obj.sprite;
+                            removeFromArray(this.objects, obj);
+                        }
+
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
     loadCurrentLevel() {
         const levelName = `level${this.currentLevel}`;
+        this.levelComplete = false;
+        this.decor = maps[this.currentLevel].decor;
         return this.loadLevel(levelName);
     }
 
     loadLevel(name) {
         const tiles = getBitmap(`${name}_tiles`);
         const wires = getBitmap(`${name}_wire`);
-        //const decor = getBitmap(`${name}_decor`); // NOTE(istarnion): I want, but not critical
         const map = [];
 
         for(let y = 0; y<tiles.height; ++y) {

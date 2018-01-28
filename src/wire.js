@@ -31,7 +31,7 @@ export class Wire {
         return this.isPowered;
     }
 
-    render() {
+    earlyRender() {
         if(!!this.sprite) {
             drawSprite(this.sprite, this.x, this.y);
         }

@@ -1,4 +1,6 @@
 import { gfx } from "./graphics.js";
+import { animations } from "./assets.js";
+import { Animation } from "./animation.js";
 
 export class Block {
     constructor(x, y) {
@@ -6,15 +8,11 @@ export class Block {
         this.y = y;
         this.solid = true;
 
-        this.currentSprite = "#4D4D4D";
+        this.sprite = new Animation(animations.block);
     }
 
     render() {
-        gfx.fillStyle = this.currentSprite;
-        gfx.fillRect(48+this.x*32+2, 12+this.y*32+2, 28, 28);
-
-        // NOTE(istarnion): This is what we will use when we get wire sprites:
-        // renderTile(this.currentSprite, this.x, this.y);
+        this.sprite.draw(this.x, this.y);
     }
 }
 

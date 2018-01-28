@@ -132,7 +132,6 @@ export const input = {
         right: [false, false],
         q: [false, false],
         e: [false, false],
-        f: [false, false],
         one: [false, false],
         two: [false, false],
         three: [false, false]
@@ -142,9 +141,6 @@ export const input = {
 const getKeyNameFromCode = (code) => {
     let key = false;
     switch(code) {
-        case "KeyZ": key = "z"; break;
-        case "KeyX": key = "x"; break;
-        case "KeyC": key = "c"; break;
         case "Space": key = "space"; break;
         case "Enter": key = "enter"; break;
         case "ArrowUp": key = "up"; break;
@@ -157,7 +153,6 @@ const getKeyNameFromCode = (code) => {
         case "KeyD": key = "right"; break;
         case "KeyQ": key = "q"; break;
         case "KeyE": key = "e"; break;
-        case "KeyF": key = "f"; break;
         case "Digit1": key = "one"; break;
         case "Digit2": key = "two"; break;
         case "Digit3": key = "three"; break;

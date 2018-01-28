@@ -6,6 +6,7 @@ export class Mirror {
         this.y = y;
         this.solid = true;
         this.isMirror = true;
+        this.orientation = orientation;
 
         this.sprite = sprites[`mirror_${orientation}`];
     }
