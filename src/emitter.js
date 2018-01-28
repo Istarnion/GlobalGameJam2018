@@ -3,7 +3,7 @@ import { Animation } from "./animation.js";
 import { Directions } from "./utils.js";
 
 export class Emitter {
-    constructor(x, y) {
+    constructor(x, y, dir) {
         this.x = x;
         this.y = y;
         this.solid = true;
@@ -12,7 +12,7 @@ export class Emitter {
 
         this.laserBeams = [];
 
-        this.direction = Directions.up;
+        this.direction = dir;
     }
 
     update(delta) {

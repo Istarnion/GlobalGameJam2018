@@ -14,6 +14,11 @@ export const maps = [
                 y: 300
             }
         ]
+    },
+    {
+        tiles: "res/levels/Map02Tiles.png",
+        wire: "res/levels/Map02Wire.png",
+        decor: []
     }
 ];
 

@@ -68,6 +68,7 @@ export const colorToTileID = (color) => {
         404040 = Nothingness
         7F0000 = Block
         FFD800 = EmitterUp
+        DE00FF = EmitterDown
         FF6A00 = MemoryUp
         00FF21 = Goal
         FF0000 = RobotRelay
@@ -93,6 +94,7 @@ export const colorToTileID = (color) => {
         case 0x57007F:
         case 0x7F6A00:
         case 0xFFD800:
+        case 0xDE00FF:
         case 0x00FF21:
         case 0xFF6A00:
         case 0xFFFFFF: return tileIDs.floor;

@@ -117,6 +117,7 @@ export class Game {
                 if(input.isKeyJustPressed("e")) {
                     if(this.activeBot === this.powerBot) {
                         this.updatePowerBotActivation(true);
+                        this.updateEmitterLaser();
                     }
                     else if(this.activeBot === this.magnetBot) {
                         this.magnetBotPushPull(true);
@@ -318,6 +319,11 @@ export class Game {
                                 }
                             }
                         }
+                        else if(obj instanceof Door) {
+                            if(!obj.open) {
+                                blocked = true;
+                            }
+                        }
                         else {
                             blocked = true;
                         }
@@ -486,6 +492,7 @@ export class Game {
         const tiles = getBitmap(`${name}_tiles`);
         const wires = getBitmap(`${name}_wire`);
         const map = [];
+        this.objects.length = 0;
 
         for(let y = 0; y<tiles.height; ++y) {
             map.push([]);
@@ -517,7 +524,11 @@ export class Game {
                             this.objects.push(new Block(x, y));
                             break;
                         case 0xFFD800:
-                            this.emitter = new Emitter(x, y);
+                            this.emitter = new Emitter(x, y, Directions.up);
+                            this.objects.push(this.emitter);
+                            break;
+                        case 0xDE00FF:
+                            this.emitter = new Emitter(x, y, Directions.down);
                             this.objects.push(this.emitter);
                             break;
                         case 0xFF6A00:
@@ -573,7 +584,7 @@ export class Game {
                         else if(id === tileIDs.door) {
                             let isHorizontal = false;
                             const tileAbove = map[_y-1][_x];
-                            if(!!tileAbove && tileAbove.solid) isHorizontal = true;
+                            if(!!tileAbove && tileAbove.id === tileIDs.wall) isHorizontal = true;
                             const door = new Door(_x, _y, isHorizontal);
                             powerblock.doors.push(door);
                             this.objects.push(door);
