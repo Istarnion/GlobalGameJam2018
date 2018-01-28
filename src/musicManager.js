@@ -5,25 +5,25 @@ class MusicManager {
         this.timeToPlayAmbientsound = 10;
         // Load sounds
         this.sounds = {};
-        this.sounds.echo = new Howl({ 
-            src: ['/res/sounds/SFXEcho.mp3'], 
+        this.sounds.echo = new Howl({
+            src: ['res/sounds/SFXEcho.mp3'],
         });
         this.sounds.blockDrag = new Howl({ 
-            src: ['/res/sounds/SFXBlockDrag.mp3'], 
+            src: ['res/sounds/SFXBlockDrag.mp3'], 
         });
         this.sounds.blockFall = new Howl({
-            src: ['/res/sounds/SFXBlockDragFall.mp3'],
+            src: ['res/sounds/SFXBlockDragFall.mp3'],
         });
         // Load music
         this.music = {};
         this.music.startDrone = new Howl({
-                src: ['/res/sounds/BassDrone_Start.mp3'],
+                src: ['res/sounds/BassDrone_Start.mp3'],
                 onend: () => {
                     this.music.loopDrone.play();
                 }
         });
         this.music.loopDrone = new Howl({
-                src: ['/res/sounds/BassDrone_Cont.mp3'],
+                src: ['res/sounds/BassDrone_Cont.mp3'],
                 loop: true,
         });
 
@@ -41,9 +41,8 @@ class MusicManager {
             new Howl({ src: ['res/sounds/ambience_09.ogg'] }),
             new Howl({ src: ['res/sounds/ambience_10.ogg'] })
         );
-        console.log(Howler.codecs("ogg"))
     }
-    update (deltaTime) { 
+    update (deltaTime) {
         this.timeToPlayAmbientsound -= deltaTime;
         if (this.timeToPlayAmbientsound <= 0 ) {
             this.timeToPlayAmbientsound = 7 + Math.random() * 15 - 7;
@@ -53,16 +52,14 @@ class MusicManager {
 
     startMusic () {}
 
-    playSound (action) { 
+    playSound (action) {
         this.sounds[action].play();
     }
-    
+
 
     beginLevel () {
         // fade inn?
         this.music.startDrone.play();
-        
-        
     }
 
     endLevel () {
