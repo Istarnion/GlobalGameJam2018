@@ -1,17 +1,19 @@
 import { gfx, getBitmap } from "./graphics.js";
 import { input } from "./input.js";
-
 import { tileIDs, colorToTileID, createTile, renderTile } from "./tiles.js";
 import { maps } from "./maps.js";
 import { Powerblock } from "./powerblock.js";
 import { Wire } from "./wire.js";
 import { Door } from "./door.js";
 import { Block } from "./block.js";
+import { Goal } from "./goal.js";
 import { Emitter } from "./emitter.js";
 import { LaserBeam } from "./laserbeam.js";
+import { Mirror } from "./mirror.js";
 
 import { RobotTypes, Robot } from "./robot.js";
 import { Directions } from "./utils.js";
+import { Cursor } from "./cursor.js";
 
 export class Game {
     constructor() { this.currentLevel = 0; this.level = {};
@@ -20,6 +22,7 @@ export class Game {
 
         this.objects = [];
         this.emitter = null;
+        this.goal = null;
 
         this.powerBot = new Robot(RobotTypes.power);
         this.magnetBot = new Robot(RobotTypes.magnet);
@@ -30,11 +33,14 @@ export class Game {
 
         this.state = "fadingIn";
         this.fadeLevel = 1.0;
+
+        this.cursor = null;
     }
 
     init() {
         this.level = this.loadCurrentLevel();
         this.updateEmitterLaser();
+        this.cursor = new Cursor(this.activeBot.x, this.activeBot.y);
     }
 
     updateAndRender(delta) {
@@ -92,10 +98,26 @@ export class Game {
                     targetY = this.activeBot.y;
                 }
 
-                this.activeBot.move(move, targetX, targetY);
+                if(move !== this.activeBot.dir || targetX !== this.activeBot.x || targetY !== this.activeBot.y) {
 
-                this.updateEmitterLaser();
+
+                    this.activeBot.move(move, targetX, targetY);
+                    if(this.activeBot === this.powerBot) {
+                        this.updatePowerBotActivation(false);
+                    }
+
+                    this.updateEmitterLaser();
+                }
             }
+            else {
+                if(input.isKeyDown("e")) {
+                    if(this.activeBot === this.powerBot) {
+                        this.updatePowerBotActivation(true);
+                    }
+                }
+            }
+
+            this.cursor.setTarget(this.activeBot.x, this.activeBot.y);
         }
         else if(this.state === "fadingIn") { this.fadeLevel = Math.max(0, this.fadeLevel - delta); if(this.fadeLevel === 0) {
                 this.state = "normal";
@@ -148,6 +170,9 @@ export class Game {
         this.powerBot.render();
         this.magnetBot.render();
         this.mirrorBot.render();
+
+        this.cursor.update(delta);
+        this.cursor.render();
 
         gfx.fillStyle = `rgba(0, 0, 0, ${this.fadeLevel})`;
         gfx.fillRect(0, 0, gfx.width, gfx.height);
@@ -227,6 +252,26 @@ export class Game {
         }
     }
 
+    updatePowerBotActivation(isOn) {
+        let targetX = this.activeBot.x;
+        let targetY = this.activeBot.y;
+        if(this.activeBot.dir === Directions.up) --targetY;
+        else if(this.activeBot.dir === Directions.right) ++targetX;
+        else if(this.activeBot.dir === Directions.down) ++targetY;
+        else if(this.activeBot.dir === Directions.left) --targetX;
+
+        for(const obj of this.objects) {
+            if(!!obj.setPowerState) {
+                if(obj.x === targetX && obj.y === targetY) {
+                    obj.setPowerState(isOn);
+                }
+                else {
+                    obj.setPowerState(false);
+                }
+            }
+        }
+    }
+
     loadCurrentLevel() {
         const levelName = `level${this.currentLevel}`;
         return this.loadLevel(levelName);
@@ -272,16 +317,18 @@ export class Game {
                             this.objects.push(this.emitter);
                             break;
                         case 0xFF6A00:
-                            // Mirror (up)
+                            // Memory (up)
                             break;
                         case 0x57007F:
-                            // Mirror SW
+                            this.objects.push(new Mirror(x, y, "sw"));
                             break;
                         case 0x7F6A00:
-                            // Mirror SE
+                            this.objects.push(new Mirror(x, y, "se"));
                             break;
                         case 0x00FF21:
                             // Goal
+                            this.goal = new Goal(x, y);
+                            this.objects.push(this.goal);
                             break;
                         default:
                             console.warn(hex.toString(16));

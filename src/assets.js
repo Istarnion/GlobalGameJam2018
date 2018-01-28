@@ -25,7 +25,16 @@ export const images = {
     horizontalDoor: "res/sprites/DoorVertical.png",
     verticalDoor: "res/sprites/DoorHorizontal.png",
 
-    laser: "res/sprites/LaserbeamGREEN.png"
+    laser: "res/sprites/LaserbeamGREEN.png",
+
+    mirror_ne: "res/sprites/MirrorBlockNE.png",
+    mirror_nw: "res/sprites/MirrorBlockNW.png",
+    mirror_se: "res/sprites/MirrorBlockSE.png",
+    mirror_sw: "res/sprites/MirrorBlockSW.png",
+
+    goal: "res/sprites/MainframeGoal.png",
+
+    cursor: "res/sprites/CursorCorner.png"
 };
 
 export const animations = {
@@ -41,6 +50,15 @@ export const animations = {
     laser: {
         image: "laser",
         timePerFrame: 0.05,
+        looping: "loop",
+        frames: [
+            { x: 0, y: 0, w: 32, h: 32 },
+            { x: 32, y: 0, w: 32, h: 32 }
+        ]
+    },
+    goal: {
+        image: "goal",
+        timePerFrame: 0.2,
         looping: "loop",
         frames: [
             { x: 0, y: 0, w: 32, h: 32 },

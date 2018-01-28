@@ -13,7 +13,9 @@ export class Powerblock {
         this.sprite = new Animation(animations.powerBlock);
     }
 
-    set powered(p) {
+    setPowerState(p) {
+        if(p === this.isPowered) return;
+
         this.isPowered = p;
 
         this.sprite.currentFrame = p ? 1 : 0;

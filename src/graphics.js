@@ -1,3 +1,5 @@
+import { Directions } from "./utils.js";
+
 const canvas = document.getElementById("game-canvas");
 export const gfx = canvas.getContext("2d");
 
@@ -156,13 +158,31 @@ export const getBitmap = (image) => {
     return result;
 }
 
-export const drawSprite = (colorOrImage, x, y, offsetX = 0, offsetY = 0) => {
+export const drawSprite = (colorOrImage, x, y, offsetX = 0, offsetY = 0, dir = Directions.up) => {
+    gfx.save();
+    gfx.translate(48+x*32+16+offsetX, 12+y*32+16+offsetY);
+
+    switch(dir) {
+        case Directions.up: break;
+        case Directions.right:
+            gfx.rotate(Math.PI / 2)
+            break;
+        case Directions.down:
+            gfx.rotate(Math.PI);
+            break;
+        case Directions.left:
+            gfx.rotate(Math.PI / -2);
+            break;
+    }
+
     if(typeof colorOrImage === "string") {
         gfx.fillStyle = colorOrImage;
-        gfx.fillRect(48+x*32+offsetX, 12+y*32+offsetY, 32, 32);
+        gfx.fillRect(-16, -16, 32, 32);
     }
     else {
-        gfx.drawImage(colorOrImage, 48+x*32, 12+y*32, 32, 32);
+        gfx.drawImage(colorOrImage, -16, -16, 32, 32);
     }
+
+    gfx.restore();
 }
 
