@@ -12,7 +12,7 @@ class MusicManager {
             src: ['/res/sounds/SFXBlockDrag.mp3'], 
         });
         this.sounds.blockFall = new Howl({
-            src: ['/res/sounds/SFCBlockDragFall'],
+            src: ['/res/sounds/SFCBlockDragFall.mp3'],
         });
         // Load music
         this.music = {};
