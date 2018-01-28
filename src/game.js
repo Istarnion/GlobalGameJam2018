@@ -430,8 +430,11 @@ export class Game {
             currCoord.x += dx;
             currCoord.y += dy;
 
+            if(currCoord.x < 0 || currCoord.x >= 22) return;
+            if(currCoord.y < 0 || currCoord.y >= 18) return;
+
             const targetTile = this.getTileAt(currCoord.x, currCoord.y);
-            if(!!targetTile && targetTile.solid) {
+            if(!!targetTile && targetTile.solid && !(targetTile.id === tileIDs.chasm)) {
                 // Can't move solid tiles
                 return;
             }
@@ -455,6 +458,9 @@ export class Game {
                             removeFromArray(this.objects, obj);
                         }
 
+                        return;
+                    }
+                    else {
                         return;
                     }
                 }

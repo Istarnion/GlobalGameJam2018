@@ -8,8 +8,8 @@ class MusicManager {
         this.sounds.echo = new Howl({
             src: ['res/sounds/SFXEcho.mp3'],
         });
-        this.sounds.blockDrag = new Howl({ 
-            src: ['res/sounds/SFXBlockDrag.mp3'], 
+        this.sounds.blockDrag = new Howl({
+            src: ['res/sounds/SFXBlockDrag.mp3'],
         });
         this.sounds.blockFall = new Howl({
             src: ['res/sounds/SFXBlockDragFall.mp3'],
