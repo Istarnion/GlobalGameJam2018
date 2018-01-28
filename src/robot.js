@@ -103,8 +103,30 @@ export class Robot {
             this.offsetX += this.deltaX * deltaTime;
             this.offsetY += this.deltaY * deltaTime;
 
-            if(Math.abs(this.offsetX) < 1) this.offsetX = 0;
-            if(Math.abs(this.offsetY) < 1) this.offsetY = 0;
+            if(this.dir === Directions.up) {
+                this.offsetX = 0;
+                if(this.offsetY < 0) {
+                    this.offsetY = 0;
+                }
+            }
+            else if(this.dir === Directions.right) {
+                this.offsetY = 0;
+                if(this.offsetX > 0) {
+                    this.offsetX = 0;
+                }
+            }
+            else if(this.dir === Directions.down) {
+                this.offsetX = 0;
+                if(this.offsetY > 0) {
+                    this.offsetY = 0;
+                }
+            }
+            else if(this.dir === Directions.left) {
+                this.offsetY = 0;
+                if(this.offsetX < 0) {
+                    this.offsetX = 0;
+                }
+            }
 
             if(this.moveTime === 0 && this.offsetX === 0 && this.offsetY === 0) {
                 this.currAnim = this.animIdle;
