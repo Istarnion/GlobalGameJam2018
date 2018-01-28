@@ -11,6 +11,9 @@ class MusicManager {
         this.sounds.blockDrag = new Howl({ 
             src: ['/res/sounds/SFXBlockDrag.mp3'], 
         });
+        this.sounds.blockFall = new Howl({
+            src: ['/res/sounds/SFCBlockDragFall'],
+        });
         // Load music
         this.music = {};
         this.music.startDrone = new Howl({
@@ -38,6 +41,7 @@ class MusicManager {
             new Howl({ src: ['res/sounds/ambience_09.ogg'] }),
             new Howl({ src: ['res/sounds/ambience_10.ogg'] })
         );
+        console.log(Howler.codecs("ogg"))
     }
     update (deltaTime) { 
         this.timeToPlayAmbientsound -= deltaTime;
