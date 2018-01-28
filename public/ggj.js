@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -275,6 +275,12 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 var images = exports.images = {
+    menuBG: "res/sprites/MenuScreenBackground.png",
+    creditsBG: "res/sprites/CreditsScreen.png",
+    playButton: "res/sprites/MainMenuPlayButton.png",
+    creditsButton: "res/sprites/MainMenuCreditsButton.png",
+    backButton: "res/sprites/BackButton.png",
+
     floor1: "res/sprites/FloorTileBaseAlt.png",
     wall1: "res/sprites/Wall1.png",
     wall2: "res/sprites/Wall2.png",
@@ -330,7 +336,7 @@ var animations = exports.animations = {
     emitter: {
         image: "emitter",
         timePerFrame: 0.3,
-        looping: "once",
+        looping: "loop",
         frames: [{ x: 0, y: 0, w: 32, h: 32 }, { x: 32, y: 0, w: 32, h: 32 }]
     },
     laser: {
@@ -747,6 +753,115 @@ var Animation = exports.Animation = function () {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.startMenu = exports.startCredits = exports.startGame = exports.gameState = undefined;
+
+var _graphics = __webpack_require__(0);
+
+var _assets = __webpack_require__(1);
+
+var _input = __webpack_require__(5);
+
+var _game = __webpack_require__(7);
+
+var _menu = __webpack_require__(19);
+
+var _credits = __webpack_require__(20);
+
+var _maps = __webpack_require__(6);
+
+var _musicManager = __webpack_require__(21);
+
+(0, _graphics.setGameSize)(800, 600);
+
+_graphics.gfx.fillText("Loading...", _graphics.gfx.width / 2, _graphics.gfx.height / 2);
+
+var prevTime = performance.now();
+
+var game = null;
+var mainMenu = null;
+var credits = null;
+
+var gameState = exports.gameState = "MainMenu";
+
+var startGame = exports.startGame = function startGame() {
+    game = new _game.Game();
+    game.init();
+    _musicManager.musicManager.beginLevel();
+    exports.gameState = gameState = "Game";
+};
+
+var startCredits = exports.startCredits = function startCredits() {
+    credits = new _credits.Credits();
+    exports.gameState = gameState = "Credits";
+};
+
+var startMenu = exports.startMenu = function startMenu() {
+    mainMenu = new _menu.MainMenu();
+    exports.gameState = gameState = "MainMenu";
+};
+
+var init = function init() {
+    startMenu();
+};
+
+var update = function update() {
+    (0, _graphics.clear)();
+    var now = performance.now();
+    var deltaTime = (now - prevTime) / 1000.0;
+    prevTime = now;
+
+    _input.input.update();
+    _musicManager.musicManager.update(deltaTime);
+
+    switch (gameState) {
+        case "MainMenu":
+            mainMenu.updateAndRender(deltaTime);
+            break;
+        case "Game":
+            game.updateAndRender(deltaTime);
+            break;
+        case "Credits":
+            credits.updateAndRender(deltaTime);
+            break;
+        default:
+            break;
+    }
+
+    window.requestAnimationFrame(update);
+    _input.input.lateUpdate();
+};
+
+var imagesToLoad = [];
+for (var img in _assets.images) {
+    if (_assets.images.hasOwnProperty(img)) {
+        imagesToLoad.push([img, _assets.images[img]]);
+    }
+}
+
+for (var i = 0; i < _maps.maps.length; ++i) {
+    var name = "level" + i + "_";
+    imagesToLoad.push([name + "tiles", _maps.maps[i].tiles]);
+
+    if (_maps.maps[i].hasOwnProperty("wire")) {
+        imagesToLoad.push([name + "wire", _maps.maps[i].wire]);
+    }
+}
+
+(0, _graphics.loadImages)(imagesToLoad).then(function () {
+    init();
+    update(); // This starts the update loop
+});
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 var input = exports.input = {
     keyDownListeners: [],
     specificKeyDownListeners: {},
@@ -1017,7 +1132,7 @@ window.addEventListener("keyup", function (e) {
 });
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1037,76 +1152,6 @@ var maps = exports.maps = [{
 }];
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _graphics = __webpack_require__(0);
-
-var _assets = __webpack_require__(1);
-
-var _input = __webpack_require__(4);
-
-var _game = __webpack_require__(7);
-
-var _maps = __webpack_require__(5);
-
-var _musicManager = __webpack_require__(19);
-
-(0, _graphics.setGameSize)(800, 600);
-
-_graphics.gfx.fillText("Loading...", _graphics.gfx.width / 2, _graphics.gfx.height / 2);
-
-var prevTime = performance.now();
-
-var game = null;
-
-var init = function init() {
-    game = new _game.Game();
-    game.init();
-    _musicManager.musicManager.beginLevel();
-};
-
-var update = function update() {
-    (0, _graphics.clear)();
-    var now = performance.now();
-    var deltaTime = (now - prevTime) / 1000.0;
-    prevTime = now;
-
-    _input.input.update();
-    _musicManager.musicManager.update(deltaTime);
-
-    game.updateAndRender(deltaTime);
-
-    window.requestAnimationFrame(update);
-
-    _input.input.lateUpdate();
-};
-
-var imagesToLoad = [];
-for (var img in _assets.images) {
-    if (_assets.images.hasOwnProperty(img)) {
-        imagesToLoad.push([img, _assets.images[img]]);
-    }
-}
-
-for (var i = 0; i < _maps.maps.length; ++i) {
-    var name = "level" + i + "_";
-    imagesToLoad.push([name + "tiles", _maps.maps[i].tiles]);
-
-    if (_maps.maps[i].hasOwnProperty("wire")) {
-        imagesToLoad.push([name + "wire", _maps.maps[i].wire]);
-    }
-}
-
-(0, _graphics.loadImages)(imagesToLoad).then(function () {
-    init();
-    update(); // This starts the update loop
-});
-
-/***/ }),
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1120,13 +1165,15 @@ exports.Game = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _app = __webpack_require__(4);
+
 var _graphics = __webpack_require__(0);
 
-var _input = __webpack_require__(4);
+var _input = __webpack_require__(5);
 
 var _tiles = __webpack_require__(8);
 
-var _maps = __webpack_require__(5);
+var _maps = __webpack_require__(6);
 
 var _powerblock = __webpack_require__(9);
 
@@ -1271,7 +1318,7 @@ var Game = exports.Game = function () {
                 if (this.fadeLevel === 1) {
                     this.currentLevel++;
                     if (this.currentLevel >= _maps.maps.length) {
-                        // Game complete
+                        (0, _app.startCredits)();
                     } else {
                         this.level = this.loadCurrentLevel();
                         this.state = "fadingIn";
@@ -2782,8 +2829,27 @@ var Robot = exports.Robot = function () {
                 this.offsetX += this.deltaX * deltaTime;
                 this.offsetY += this.deltaY * deltaTime;
 
-                if (Math.abs(this.offsetX) < 1) this.offsetX = 0;
-                if (Math.abs(this.offsetY) < 1) this.offsetY = 0;
+                if (this.dir === _utils.Directions.up) {
+                    this.offsetX = 0;
+                    if (this.offsetY < 0) {
+                        this.offsetY = 0;
+                    }
+                } else if (this.dir === _utils.Directions.right) {
+                    this.offsetY = 0;
+                    if (this.offsetX > 0) {
+                        this.offsetX = 0;
+                    }
+                } else if (this.dir === _utils.Directions.down) {
+                    this.offsetX = 0;
+                    if (this.offsetY > 0) {
+                        this.offsetY = 0;
+                    }
+                } else if (this.dir === _utils.Directions.left) {
+                    this.offsetY = 0;
+                    if (this.offsetX < 0) {
+                        this.offsetX = 0;
+                    }
+                }
 
                 if (this.moveTime === 0 && this.offsetX === 0 && this.offsetY === 0) {
                     this.currAnim = this.animIdle;
@@ -2894,11 +2960,107 @@ var Cursor = exports.Cursor = function () {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.MainMenu = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _graphics = __webpack_require__(0);
+
+var _input = __webpack_require__(5);
+
+var _app = __webpack_require__(4);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var MainMenu = exports.MainMenu = function () {
+    function MainMenu() {
+        _classCallCheck(this, MainMenu);
+
+        this.playSelected = true;
+    }
+
+    _createClass(MainMenu, [{
+        key: "updateAndRender",
+        value: function updateAndRender(delta) {
+            if (_input.input.isKeyJustPressed("up") || _input.input.isKeyJustPressed("down")) {
+                this.playSelected = !this.playSelected;
+            } else if (_input.input.isKeyJustPressed("e")) {
+                if (this.playSelected) {
+                    (0, _app.startGame)();
+                } else {
+                    (0, _app.startCredits)();
+                }
+            }
+
+            _graphics.gfx.drawImage(_graphics.sprites["menuBG"], 0, 0);
+
+            _graphics.gfx.drawImage(_graphics.sprites["playButton"], this.playSelected ? 256 : 0, 0, 256, 128, 136, 133, 256, 128);
+
+            _graphics.gfx.drawImage(_graphics.sprites["creditsButton"], this.playSelected ? 0 : 256, 0, 256, 128, 136, 339, 256, 128);
+        }
+    }]);
+
+    return MainMenu;
+}();
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Credits = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _graphics = __webpack_require__(0);
+
+var _input = __webpack_require__(5);
+
+var _app = __webpack_require__(4);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Credits = exports.Credits = function () {
+    function Credits() {
+        _classCallCheck(this, Credits);
+    }
+
+    _createClass(Credits, [{
+        key: "updateAndRender",
+        value: function updateAndRender(delta) {
+            if (_input.input.isKeyJustPressed("e")) {
+                (0, _app.startMenu)();
+            }
+
+            _graphics.gfx.drawImage(_graphics.sprites["creditsBG"], 0, 0);
+
+            _graphics.gfx.drawImage(_graphics.sprites["backButton"], 256, 0, 256, 128, 405, 394, 256, 128);
+        }
+    }]);
+
+    return Credits;
+}();
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 exports.musicManager = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _howlerMin = __webpack_require__(20);
+var _howlerMin = __webpack_require__(22);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2917,6 +3079,9 @@ var MusicManager = function () {
         this.sounds.blockDrag = new _howlerMin.Howl({
             src: ['/res/sounds/SFXBlockDrag.mp3']
         });
+        this.sounds.blockFall = new _howlerMin.Howl({
+            src: ['/res/sounds/SFXBlockDragFall.mp3']
+        });
         // Load music
         this.music = {};
         this.music.startDrone = new _howlerMin.Howl({
@@ -2933,6 +3098,7 @@ var MusicManager = function () {
         // Load ambientSounds
         this.ambientSounds = [];
         this.ambientSounds.push(new _howlerMin.Howl({ src: ['res/sounds/ambience_01.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_02.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_03.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_04.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_05.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_06.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_07.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_08.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_09.ogg'] }), new _howlerMin.Howl({ src: ['res/sounds/ambience_10.ogg'] }));
+        console.log(_howlerMin.Howler.codecs("ogg"));
     }
 
     _createClass(MusicManager, [{
@@ -2976,7 +3142,7 @@ var MusicManager = function () {
 var musicManager = exports.musicManager = new MusicManager();
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3360,7 +3526,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         t = o ? parseInt(o[1], 10) : null;if (e && t && t < 9) {
       var r = /safari/.test(n._navigator && n._navigator.userAgent.toLowerCase());(n._navigator && n._navigator.standalone && !r || n._navigator && !n._navigator.standalone && !r) && (n.usingWebAudio = !1);
     }n.usingWebAudio && (n.masterGain = void 0 === n.ctx.createGain ? n.ctx.createGainNode() : n.ctx.createGain(), n.masterGain.gain.setValueAtTime(n._muted ? 0 : 1, n.ctx.currentTime), n.masterGain.connect(n.ctx.destination)), n._setup();
-  };"function" == "function" && __webpack_require__(22) && !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function () {
+  };"function" == "function" && __webpack_require__(24) && !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function () {
     return { Howler: n, Howl: o };
   }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)), "undefined" != typeof exports && (exports.Howler = n, exports.Howl = o), "undefined" != typeof window ? (window.HowlerGlobal = e, window.Howler = n, window.Howl = o, window.Sound = t) : "undefined" != typeof global && (global.HowlerGlobal = e, global.Howler = n, global.Howl = o, global.Sound = t);
@@ -3436,10 +3602,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     e = e || "spatial", "spatial" === e ? (_n._panner = Howler.ctx.createPanner(), _n._panner.coneInnerAngle = _n._pannerAttr.coneInnerAngle, _n._panner.coneOuterAngle = _n._pannerAttr.coneOuterAngle, _n._panner.coneOuterGain = _n._pannerAttr.coneOuterGain, _n._panner.distanceModel = _n._pannerAttr.distanceModel, _n._panner.maxDistance = _n._pannerAttr.maxDistance, _n._panner.refDistance = _n._pannerAttr.refDistance, _n._panner.rolloffFactor = _n._pannerAttr.rolloffFactor, _n._panner.panningModel = _n._pannerAttr.panningModel, _n._panner.setPosition(_n._pos[0], _n._pos[1], _n._pos[2]), _n._panner.setOrientation(_n._orientation[0], _n._orientation[1], _n._orientation[2])) : (_n._panner = Howler.ctx.createStereoPanner(), _n._panner.pan.setValueAtTime(_n._stereo, Howler.ctx.currentTime)), _n._panner.connect(_n._node), _n._paused || _n._parent.pause(_n._id, !0).play(_n._id);
   };
 }();
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)))
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ (function(module, exports) {
 
 var g;
@@ -3466,7 +3632,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
