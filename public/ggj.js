@@ -1777,7 +1777,9 @@ var Game = exports.Game = function () {
 
                                 return;
                             } else {
-                                return;
+                                if (!(obj instanceof _wire.Wire || obj instanceof _door.Door && obj.open)) {
+                                    return;
+                                }
                             }
                         }
                     }

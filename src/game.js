@@ -1,5 +1,6 @@
 import { startCredits } from "./app.js";
 import { gfx, sprites, getBitmap } from "./graphics.js";
+import { musicManager } from "./musicManager.js";
 import { input } from "./input.js";
 import { tileIDs, colorToTileID, createTile, renderTile } from "./tiles.js";
 import { maps } from "./maps.js";
@@ -451,11 +452,13 @@ export class Game {
                         if(this.canRobotWalkTo(targetX, targetY)) {
                             obj.x = targetX;
                             obj.y = targetY;
+                            musicManager.playSound("blockDrag");
                         }
                         else if((obj instanceof Block) && this.getTileAt(targetX, targetY).id === tileIDs.chasm) {
                             this.level[targetY][targetX] = createTile(tileIDs.fallenBlock);
                             this.level[targetY][targetX].sprite = obj.sprite;
                             removeFromArray(this.objects, obj);
+                            musicManager.playSound("blockFall");
                         }
 
                         return;
