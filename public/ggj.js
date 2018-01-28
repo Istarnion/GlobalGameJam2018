@@ -323,7 +323,8 @@ var images = exports.images = {
 
     cursor: "res/sprites/CursorCorner.png",
 
-    tutorial: "res/sprites/TutorialTextFinish.png"
+    tutorial: "res/sprites/TutorialTextFinish.png",
+    hint: "res/sprites/GetLaserHereToWinBigBlueNew.png"
 };
 
 var animations = exports.animations = {
@@ -1148,6 +1149,10 @@ var maps = exports.maps = [{
         image: "tutorial",
         x: 595,
         y: 380
+    }, {
+        image: "hint",
+        x: 371,
+        y: 300
     }]
 }];
 
@@ -1363,6 +1368,16 @@ var Game = exports.Game = function () {
                 this.state = "fadingOut";
             }
 
+            // Render tiles:
+            for (var y = 0; y < this.height; ++y) {
+                for (var x = 0; x < this.width; ++x) {
+                    var tile = this.getTileAt(x, y);
+                    if (tile.hasOwnProperty("render")) {
+                        tile.render(x, y);
+                    }
+                }
+            }
+
             var _iteratorNormalCompletion2 = true;
             var _didIteratorError2 = false;
             var _iteratorError2 = undefined;
@@ -1373,8 +1388,6 @@ var Game = exports.Game = function () {
 
                     _graphics.gfx.drawImage(_graphics.sprites[d.image], d.x, d.y);
                 }
-
-                // Render tiles:
             } catch (err) {
                 _didIteratorError2 = true;
                 _iteratorError2 = err;
@@ -1386,15 +1399,6 @@ var Game = exports.Game = function () {
                 } finally {
                     if (_didIteratorError2) {
                         throw _iteratorError2;
-                    }
-                }
-            }
-
-            for (var y = 0; y < this.height; ++y) {
-                for (var x = 0; x < this.width; ++x) {
-                    var tile = this.getTileAt(x, y);
-                    if (tile.hasOwnProperty("render")) {
-                        tile.render(x, y);
                     }
                 }
             }
