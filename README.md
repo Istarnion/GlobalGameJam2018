@@ -4,7 +4,7 @@
 You need npm and an up-to-date modern browser.
 
 ```
-git pull https://github.com/Istarnion/GlobalGameJam2018.git
+git clone https://github.com/Istarnion/GlobalGameJam2018.git
 cd GlobalGameJam2018
 npm install
 ```
